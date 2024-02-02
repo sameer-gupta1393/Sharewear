@@ -1,3 +1,21 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body{
+    background-color: #FDF5E2;
+}
+.parentGridPage2 {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+    }
+    
+    .page2div1 { grid-area: 1 / 3 / 3 / 5; }
+    .page2div2 { grid-area: 3 / 3 / 5 / 5; }
+    .page2div3 { grid-area: 6 / 1 / 7 / 3; }
+    .page2div4 { grid-area: 5 / 1 / 6 / 3; }
+    .page2div5 { grid-area: 1 / 1 / 5 / 3; }
+    .page2div6 { grid-area: 5 / 3 / 7 / 5; }
