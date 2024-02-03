@@ -1,10 +1,65 @@
 import React from 'react'
 import SideBar from './parts/SideBar'
 import Cards from './parts/Cards'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import Page2 from './Page2'
 const Page1 = () => {
+
+  const Grid=()=>{
+    return (
+       /* Main Content Grid */
+       <div className="col-span-3 p-2 overflow-hidden grid grid-cols-3 gap-4">
+       {/* Card 1 */}
+       <div className="flex items-stretch ">
+         {/* Card Content */}
+         <Cards/>
+       </div>
+
+       {/* Card 2 */}
+       <div className="flex items-stretch  ">
+         {/* Card Content */}
+         <Cards/>
+       </div>
+
+       {/* Card 3 */}
+       <div className="flex items-stretch  ">
+         {/* Card Content */}
+          <Cards/>
+       </div>
+
+       {/* Card 4 */}
+       <div className="flex items-stretch  ">
+         {/* Card Content */}
+          <Cards/>
+       </div>
+       <div className="flex items-stretch ">
+         {/* Card Content */}
+         <Cards/>
+       </div>
+
+       {/* Card 2 */}
+       <div className="flex items-stretch  ">
+         {/* Card Content */}
+         <Cards/>
+       </div>
+
+       {/* Card 3 */}
+       <div className="flex items-stretch  ">
+         {/* Card Content */}
+          <Cards/>
+       </div>
+
+       {/* Card 4 */}
+       <div className="flex items-stretch  ">
+         {/* Card Content */}
+          <Cards/>
+       </div>
+     </div>
+    )
+  }
   return (
   <div>
-  <div className='flex mt-[10px] mx-[10px]'>
+  <div className='flex  py-[10px] px-[20px] bg-stone-300/10'>
   <div className='w-[40%] m-auto'>
       <form onSubmit={(e)=>{
         e.preventDefault()
@@ -24,62 +79,26 @@ const Page1 = () => {
   <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Sign up</button>
   <button type="button" class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">Rent</button>
   </div>
-  <div className="grid grid-cols-4 h-auto max-w-[80vw]">
+  <BrowserRouter>
+  <div className="grid grid-cols-4 h-auto max-w-[80vw] ">
       {/* Sidebar */}
+
       <div className="col-span-1 self-stretch">
         {/* Sidebar content */}
         <SideBar/>
       </div>
-
-      {/* Main Content Grid */}
-      <div className="col-span-3 p-2 overflow-hidden grid grid-cols-3 gap-4">
-        {/* Card 1 */}
-        <div className="flex items-stretch ">
-          {/* Card Content */}
-          <Cards/>
-        </div>
-
-        {/* Card 2 */}
-        <div className="flex items-stretch  ">
-          {/* Card Content */}
-          <Cards/>
-        </div>
-
-        {/* Card 3 */}
-        <div className="flex items-stretch  ">
-          {/* Card Content */}
-           <Cards/>
-        </div>
-
-        {/* Card 4 */}
-        <div className="flex items-stretch  ">
-          {/* Card Content */}
-           <Cards/>
-        </div>
-        <div className="flex items-stretch ">
-          {/* Card Content */}
-          <Cards/>
-        </div>
-
-        {/* Card 2 */}
-        <div className="flex items-stretch  ">
-          {/* Card Content */}
-          <Cards/>
-        </div>
-
-        {/* Card 3 */}
-        <div className="flex items-stretch  ">
-          {/* Card Content */}
-           <Cards/>
-        </div>
-
-        {/* Card 4 */}
-        <div className="flex items-stretch  ">
-          {/* Card Content */}
-           <Cards/>
-        </div>
+   
+    <Routes>
+    <Route path='/' element={<Grid/>} />
+    <Route path='/card' element={
+      <div className='col-span-3'>
+            <Page2/>
       </div>
+      } /> 
+      </Routes>
+    
     </div>
+    </BrowserRouter>
   </div>
   )
 }
