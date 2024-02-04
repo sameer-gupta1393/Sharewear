@@ -6,7 +6,11 @@ export default withMT({
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: { 
+        protest : ['Protest Revolution','cursive'],
+       }, 
+      },
   },
   plugins: [],
 })

@@ -1,9 +1,14 @@
+
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200&display=swap');
+
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 body{
     background-color: #FDF5E2;
+    font-family:Poppins;
 }
 .parentGridPage2 {
     display: grid;
