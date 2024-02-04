@@ -1,6 +1,7 @@
 import {useState} from 'react';
 
 import TabButton from './parts/TabButton';
+import ImageUploadForm from './parts/ImageUploadForm';
 
 const catagories=["MEN","WOMEN","CHILDREN"];
 
@@ -18,7 +19,7 @@ export default function Page3() {
     </nav>
   
     <TabButton />
-
+ 
     </>
       
   )
