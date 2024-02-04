@@ -1,15 +1,14 @@
+import {useState} from 'react';
 
-function TabButton({children}){
-  return (
-    <li className="list-none text-base font-normal">
-    <button className=" w-full"><p className="text-center py-[20px] hover:bg-gray-300">{children}</p></button>
-    </li>
-  )
+import TabButton from './parts/TabButton';
 
-}
-const catagories=["men","women","children"];
+const catagories=["MEN","WOMEN","CHILDREN"];
+
 export default function Page3() {
-
+  const [cate,setCate]=useState('');
+  const handleCLick=(n)=>{
+    setCate(n);
+  }
   return(
     
     < >
@@ -17,13 +16,24 @@ export default function Page3() {
       <i className="fa-solid fa-arrow-left cursor-pointer "></i>
       <h1 className="grow p-20 font-bold">POST YOUR AD</h1>
     </nav>
-    <div className="h-auto mt-[30px] bg-white rounded-lg w-3/5 m-auto border-black border-2">
-          <h6 className="p-5 border-b-2 border-black/20">CHOOSE A CATEGORY</h6><hr className="h-[5px]"/>
-          {catagories.map((item)=>{
-            return <TabButton>{item}</TabButton>
-           fkj
+
+    {/* <div className="h-auto mt-[30px] bg-white rounded-lg w-3/5 m-auto border-black border-2">
+          <h6 className="p-5 border-b-2 border-black/20 font-bold">CHOOSE A CATEGORY</h6><hr className="h-[5px]"/>
+          {catagories.map((item,id)=>{
+            return <TabButton click={()=>{handleCLick(id)}} key={id}>{item}</TabButton>
           })}
     </div>
+
+    <section>
+      <div><h2>SELECTED CATEGORY</h2>
+      <p> {catagories.filter((item,id)=>{
+            return  cate==id
+          })}</p>
+      </div>
+    </section> */}
+  
+    <TabButton />
+
     </>
       
   )
