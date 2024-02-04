@@ -21,6 +21,7 @@ export default function Page3() {
           <h6 className="p-5 border-b-2 border-black/20">CHOOSE A CATEGORY</h6><hr className="h-[5px]"/>
           {catagories.map((item)=>{
             return <TabButton>{item}</TabButton>
+           fkj
           })}
     </div>
     </>
