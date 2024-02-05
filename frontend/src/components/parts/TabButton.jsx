@@ -1,12 +1,51 @@
-import { useEffect,useState } from "react";
+import { useEffect,useState ,useRef} from "react";
+import Google from "./Google";
 
 export default function TabButton( ){
     const [selectedValue, setSelectedValue] = useState([]);
-    
- 
+    //setting images 
+    const [file1, setFile1] = useState();
+    const [file2, setFile2] = useState();
+    const [file3, setFile3] = useState();
+    const [file4, setFile4] = useState();
+    function handleChange1(e) {
+        if(e.target.files.length!=0){
+        console.log(e.target.files);
+        setFile1(URL.createObjectURL(e.target.files[0]));
+    }else{
+        setFile1(null)
+    }
+    }
+    function handleChange2(e) {
+        if(e.target.files.length!=0){
+        console.log(e.target.files);
+        setFile2(URL.createObjectURL(e.target.files[0]));
+    }else{
+        setFile2()
+    }
+    }
+    function handleChange3(e) {
+        if(e.target.files.length!=0){
+        console.log(e.target.files);
+        setFile3(URL.createObjectURL(e.target.files[0]));
+    }else{
+        setFile3()
+    }
+    }
+    function handleChange4(e) {
+        if(e.target.files.length!=0){
+        console.log(e.target.files);
+        setFile4(URL.createObjectURL(e.target.files[0]));
+    }else{
+        setFile4()
+    }
+    }
+
+   
     const handleSelectChange = (event) => {
-      const data=[event[0].value,event[1].value,event[2].value,event[3].value]
+      const data=[event[0]?.value,event[1]?.value,event[2]?.value,event[3]?.value,event[4].value,event[5]?.value,event[6]?.value,event[7].value,event[8].value,event[9].value]
       setSelectedValue(data);
+       
       
     };
     useEffect(()=>{
@@ -16,9 +55,9 @@ export default function TabButton( ){
    <div>
   
     <section className="bg-gray-100 dark:bg-gray-900">
-     <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
+     <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto lg:py-0">
        
-      <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
+      <div className="w-full bg-white rounded-lg shadow dark:border md:my-10 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
               <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
                   Rent Your Product
@@ -30,7 +69,7 @@ export default function TabButton( ){
                  handleSelectChange(e.target);
                   }
                  } 
-                className="space-y-4 md:space-y-6"  >
+            className="space-y-4 md:space-y-6"  >
               <div className="relative h-10  w-full mt-[30px] mx-auto">
               <select className="peer h-full w-full rounded-[7px] border border-blue-gray-200 border-t-transparent  bg-transparent px-3 py-2.5 font-sans text-sm font-normal text-blue-gray-700 outline outline-0  transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200
                       placeholder-shown:border-t-blue-gray-200 empty:!bg-gray-900 focus:border-2
@@ -60,10 +99,44 @@ export default function TabButton( ){
                       <input type="number" name="productPrice" id="productPrice" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="your product rent amount" required=""/>
                   </div>
                   <div>
-                      <label htmlFor="productImg" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Product Images   </label>
-                      <input type="file" multiple name="productImg" id="productImg" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="your product rent amount" required=""/>
+                      <label htmlFor="productImg1" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Product Images   </label>
+                      <input type="file"  name="productImg1" onChange={handleChange1} accept="image/*" id="file1" className="hidden bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="your product rent amount" required=""/>
+                      <input type="file" name="productImg2" onChange={handleChange2} accept="image/*" id="file2" className="hidden bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="your product rent amount" />
+                      <input type="file" name="productImg3" onChange={handleChange3} accept="image/*" id="file3" className="hidden bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="your product rent amount" />
+                      <input type="file" name="productImg4" onChange={handleChange4} accept="image/*" id="file4" className="hidden bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="your product rent amount" />
+                   <div className="inline-flex border-2   m-auto p-[10px]">
+                      {file1?<div className="h-[50px] relative w-[60px]   inline-flex justify-center items-center mr-[10px] border-2 border-black border-dashed">
+                      <i onClick={()=>{setFile1(""); document.getElementById("file1").value=null; }} className="fa-solid absolute right-0 top-0 text-red-400 fa-circle-xmark"></i>
+                        <img src={file1} className="h-[45px] w-[53px] " /></div>:<div className="h-[50px] w-[60px]   inline-flex justify-center items-center mr-[10px] border-2 border-black border-dashed" 
+                      onClick={()=>{document.getElementById("file1").click();}}>
+
+                         <svg xmlns="http://www.w3.org/2000/svg" className="h-[30px]" viewBox="0 0 24 24"> <g> <path fill="none" d="M0 0h24v24H0z"/> <path d="M21 15v3h3v2h-3v3h-2v-3h-3v-2h3v-3h2zm.008-12c.548 0 .992.445.992.993v9.349A5.99 5.99 0 0 0 20 13V5H4l.001 14 9.292-9.293a.999.999 0 0 1 1.32-.084l.093.085 3.546 3.55a6.003 6.003 0 0 0-3.91 7.743L2.992 21A.993.993 0 0 1 2 20.007V3.993A1 1 0 0 1 2.992 3h18.016zM8 7a2 2 0 1 1 0 4 2 2 0 0 1 0-4z"/> </g> 
+                         </svg>
+                      </div>}
+                      {file2?<div className="h-[50px] w-[60px]  relative inline-flex justify-center items-center mr-[10px] border-2 border-black border-dashed">
+                      <i onClick={()=>{setFile2(""); document.getElementById("file2").value=null;}} className="fa-solid absolute right-0 top-0 text-red-400 fa-circle-xmark"></i>
+                      <img src={file2} className="h-[45px] w-[53px] " /></div>:<div className="h-[50px] w-[60px]   inline-flex justify-center items-center mr-[10px] border-2 border-black border-dashed" 
+                      onClick={()=>{document.getElementById("file2").click();}}>
+                         <svg xmlns="http://www.w3.org/2000/svg" className="h-[30px]" viewBox="0 0 24 24"> <g> <path fill="none" d="M0 0h24v24H0z"/> <path d="M21 15v3h3v2h-3v3h-2v-3h-3v-2h3v-3h2zm.008-12c.548 0 .992.445.992.993v9.349A5.99 5.99 0 0 0 20 13V5H4l.001 14 9.292-9.293a.999.999 0 0 1 1.32-.084l.093.085 3.546 3.55a6.003 6.003 0 0 0-3.91 7.743L2.992 21A.993.993 0 0 1 2 20.007V3.993A1 1 0 0 1 2.992 3h18.016zM8 7a2 2 0 1 1 0 4 2 2 0 0 1 0-4z"/> </g> 
+                         </svg>
+                      </div>}
+                      {file3?<div className="h-[50px] w-[60px]  relative inline-flex justify-center items-center mr-[10px] border-2 border-black border-dashed">
+                      <i onClick={()=>{setFile3(""); document.getElementById("file3").value=null;}} className="fa-solid absolute right-0 top-0 text-red-400 fa-circle-xmark"></i>
+                      <img src={file3} className="h-[45px] w-[53px] " /></div>: <div className="h-[50px] w-[60px]   inline-flex justify-center items-center mr-[10px] border-2 border-black border-dashed" 
+                      onClick={()=>{document.getElementById("file3").click();}}>
+                         <svg xmlns="http://www.w3.org/2000/svg" className="h-[30px]" viewBox="0 0 24 24"> <g> <path fill="none" d="M0 0h24v24H0z"/> <path d="M21 15v3h3v2h-3v3h-2v-3h-3v-2h3v-3h2zm.008-12c.548 0 .992.445.992.993v9.349A5.99 5.99 0 0 0 20 13V5H4l.001 14 9.292-9.293a.999.999 0 0 1 1.32-.084l.093.085 3.546 3.55a6.003 6.003 0 0 0-3.91 7.743L2.992 21A.993.993 0 0 1 2 20.007V3.993A1 1 0 0 1 2.992 3h18.016zM8 7a2 2 0 1 1 0 4 2 2 0 0 1 0-4z"/> </g> 
+                         </svg>
+                      </div>}
+                      {file4?<div className="h-[50px] w-[60px]  relative inline-flex justify-center items-center mr-[10px] border-2 border-black border-dashed">
+                      <i onClick={()=>{setFile4(""); document.getElementById("file4").value=null;}} className="fa-solid absolute right-0 top-0 text-red-400 fa-circle-xmark"></i>
+                      <img src={file4} className="h-[45px] w-[53px] " /></div>: <div className="h-[50px] w-[60px]   inline-flex justify-center items-center mr-[10px] border-2 border-black border-dashed" 
+                      onClick={()=>{document.getElementById("file4").click();}}>
+                         <svg xmlns="http://www.w3.org/2000/svg" className="h-[30px]" viewBox="0 0 24 24"> <g> <path fill="none" d="M0 0h24v24H0z"/> <path d="M21 15v3h3v2h-3v3h-2v-3h-3v-2h3v-3h2zm.008-12c.548 0 .992.445.992.993v9.349A5.99 5.99 0 0 0 20 13V5H4l.001 14 9.292-9.293a.999.999 0 0 1 1.32-.084l.093.085 3.546 3.55a6.003 6.003 0 0 0-3.91 7.743L2.992 21A.993.993 0 0 1 2 20.007V3.993A1 1 0 0 1 2.992 3h18.016zM8 7a2 2 0 1 1 0 4 2 2 0 0 1 0-4z"/> </g> 
+                         </svg>
+                      </div>}
+                      </div>
                   </div>
-                   
+                <Google/>
                   <button type="submit"   className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Rent</button>
                   
               </form>
