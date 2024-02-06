@@ -4,6 +4,7 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import Page2 from './Page2'
 import Page3 from './Page3'
 import Grid from './parts/Grid'
+import Login from './parts/Login'
 const App = () => {
   const appRouter=createBrowserRouter([
     {
@@ -18,7 +19,19 @@ const App = () => {
         element:<div className='col-span-3'>
         <Page2/>
   </div>
-      }]
+      },{
+        
+          path:"/signup",
+          element:<div className='col-span-3 m-auto'>
+          <Login value={true}/>
+    </div>
+      },{
+        
+        path:"/login",
+        element:<div className='col-span-3 m-auto'>
+        <Login value={false}/>
+  </div>
+    }  ]
     },
     {
       path:"/rent",
