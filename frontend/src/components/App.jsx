@@ -1,11 +1,14 @@
 import React from 'react'
 import Page1 from './Page1'
-import { RouterProvider, createBrowserRouter } from 'react-router-dom'
+import { RouterProvider, createBrowserRouter ,Navigate} from 'react-router-dom'
 import Page2 from './Page2'
 import Page3 from './Page3'
 import Grid from './parts/Grid'
 import Login from './parts/Login'
+import Signup from './parts/Signup'
 const App = () => {
+  const auth=localStorage.getItem('user'); // is key 
+  // return auth?<Outlet/>:<Navigate to="/signup"/>
   const appRouter=createBrowserRouter([
     {
       path:"/",
@@ -21,21 +24,21 @@ const App = () => {
   </div>
       },{
         
-          path:"/signup",
+          path:"/login",
           element:<div className='col-span-3 m-auto'>
-          <Login value={true}/>
+          <Login/>
     </div>
       },{
         
-        path:"/login",
+        path:"/signup",
         element:<div className='col-span-3 m-auto'>
-        <Login value={false}/>
+        <Signup/>
   </div>
     }  ]
     },
     {
       path:"/rent",
-      element :<Page3/>
+      element :auth?<Page3/>:<Navigate to="/signup"/>
     } 
   
   ])

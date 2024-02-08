@@ -58,7 +58,10 @@ const Login = (props) => {
         const loginBtn = document.querySelector("label.login");
         const signupBtn = document.querySelector("label.signup");
         const signupLink = document.querySelector("form .signup-link a");
-       
+        (()=>{
+            loginForm.style.marginLeft = "-50%";
+            loginText.style.marginLeft = "-50%";
+        })()
         signupBtn.onclick = (()=>{
           loginForm.style.marginLeft = "-50%";
           loginText.style.marginLeft = "-50%";
@@ -83,8 +86,8 @@ const Login = (props) => {
     <div className="form-container">
       <div className="slide-controls">
        
-        <input type="radio" name="slide" id="login" defaultChecked />
-        <input type="radio" name="slide" id="signup"  /> 
+        <input type="radio" name="slide" id="login"  />
+        <input type="radio" name="slide" id="signup"  defaultChecked/> 
         <label htmlFor="login" className="slide login">Login</label>
         <label htmlFor="signup" className="slide signup">Signup</label>
         <div className="slider-tab"></div>
@@ -100,9 +103,7 @@ const Login = (props) => {
           <div className="pass-link"><a href="#">Forgot password?</a></div>
           <div className="field btn">
             <div className="btn-layer"></div>
-            <input type="submit" value="Login" onClick={(e)=>{e.preventDefault();
-                handleClick()
-                 }}/>
+            <input type="submit" value="Login"/>
           </div>
           <div className="signup-link">Not a member? <a href="">Signup now</a></div>
         </form>
