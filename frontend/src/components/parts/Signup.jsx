@@ -1,7 +1,9 @@
 import React, { useEffect ,useRef} from 'react'
 import { useNavigate  } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import "./login.css"
-const Login = (props) => {
+import { addUser } from '../utils/userSlice';
+const Login = ( ) => {
   const name1=useRef(null);
   const email1=useRef(null);
   const password1=useRef(null);
@@ -10,7 +12,7 @@ const Login = (props) => {
   const password2=useRef(null);
   
   const navigate=useNavigate();
-  
+  const dispatch=useDispatch();
   const handleClick=async ()=>{
        
     let result =await fetch('http://localhost:5000/login',{
@@ -25,6 +27,7 @@ const Login = (props) => {
     console.log(result)
     if(result.name){
       localStorage.setItem('user',JSON.stringify(result))
+      dispatch(addUser({username:result.name,email:result.email}))
       navigate("/ ")
     }else{
       alert("please enter correct details")
@@ -43,6 +46,7 @@ const Login = (props) => {
       console.log(result)
       localStorage.setItem("user",JSON.stringify(result)) //The JSON.stringify() static method converts a JavaScript value to a JSON string, optionally replacing values if a replacer function is specified or optionally including only the specified properties if a replacer array is specified.
       if(result){
+        dispatch(addUser({username:result.name,email:result.email}))
         navigate('/')
       }
     }
@@ -75,7 +79,7 @@ const Login = (props) => {
           return false;
         });
   
-    },[props.value])
+    },[ ])
   return (
     // <div id="authentication-modal" aria-hidden="true" className="hidden overflow-x-hidden overflow-y-auto fixed h-modal md:h-full top-4 left-0 right-0 md:inset-0 z-50 justify-center items-center">
     <div className="wrapper">
@@ -103,7 +107,9 @@ const Login = (props) => {
           <div className="pass-link"><a href="#">Forgot password?</a></div>
           <div className="field btn">
             <div className="btn-layer"></div>
-            <input type="submit" value="Login"/>
+            <input type="submit" value="Login" onClick={(e)=>{e.preventDefault();
+                handleClick()
+                 }}/>
           </div>
           <div className="signup-link">Not a member? <a href="">Signup now</a></div>
         </form>

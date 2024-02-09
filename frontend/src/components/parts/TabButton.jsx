@@ -1,5 +1,7 @@
 import { useEffect,useState ,useRef} from "react";
 import Google from "./Google";
+import { addUser,addUserCard } from "../utils/userSlice";
+import { useDispatch } from "react-redux";
 
 export default function TabButton( ){
     const [selectedValue, setSelectedValue] = useState([]);
@@ -8,6 +10,7 @@ export default function TabButton( ){
     const [file2, setFile2] = useState();
     const [file3, setFile3] = useState();
     const [file4, setFile4] = useState();
+    const dispatch=useDispatch()
     function handleChange1(e) {
         if(e.target.files.length!=0){
         console.log(e.target.files);
@@ -45,7 +48,8 @@ export default function TabButton( ){
     const handleSelectChange = (event) => {
       const data=[event[0]?.value,event[1]?.value,event[2]?.value,event[3]?.value,event[4].value,event[5]?.value,event[6]?.value,event[7].value,event[8].value,event[9].value]
       setSelectedValue(data);
-       
+    dispatch(addUser({location:event[9].value}))
+    dispatch(addUserCard([{productCat:event[0].value,productName:event[1].value,productDesc:event[2].value,productPrice:event[3].value,productImg:[{img1:event[4].value,img2:event[5].value,img3:event[6].value,img4:event[7].value}],productLoc:event[8].value,productCoord:event[9].value}]))
       
     };
     useEffect(()=>{
