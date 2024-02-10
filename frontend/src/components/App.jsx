@@ -3,6 +3,7 @@ import Page1 from './Page1'
 import { RouterProvider, createBrowserRouter} from 'react-router-dom'
 import Page2 from './Page2'
 import Page3 from './Page3'
+import Page4 from './Page4'
 import Grid from './parts/Grid'
 import Login from './parts/Login'
 import Signup from './parts/Signup'
@@ -36,7 +37,13 @@ const App = () => {
         element:<div className='col-span-3 m-auto'>
         <Signup/>
   </div>
-    }  ]
+    },{
+        
+      path:"/products",
+      element:<div className='col-span-3  '>
+       <Page4/>
+</div>
+  }   ]
     },
     {
       path:"/rent",
