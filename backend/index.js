@@ -1,6 +1,8 @@
 const express=require('express')
 const cors=require("cors")
 require('./db/config')
+const multer =require('multer')
+const path=require('path')
 const User=require("./db/users")
 const app=express()
 app.use(cors())
@@ -11,6 +13,20 @@ app.post('/register',async(req,res)=>{
     delete result.password;
     res.send(result);
  
+})
+const storage=multer.diskStorage({
+    destination:(req,file,cb)=>{
+        cb(null,'public/images')
+    },
+    filename:(req,file,cb)=>{
+     cb(null,file.fieldname+"-"+Date.now()+path.extname(file.originalname))
+    }
+})
+const upload=multer({
+    storage:storage
+})
+app.post('/upload',(req,res)=>{
+  console.log(req.file)
 })
 app.post('/login',async (req,res)=>{
     

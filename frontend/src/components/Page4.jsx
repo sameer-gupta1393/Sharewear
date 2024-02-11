@@ -21,9 +21,9 @@ import { Carousel } from "@material-tailwind/react";
                 <Carousel className="rounded-xl page2div5">
                     
                             <img  
-                                    src={card.img1}
-                                    alt="image 1"
-                                    className="h-full w-full object-cover object-center"
+                              src={card.img1}
+                              alt="image 1"
+                              className="h-full w-full object-cover object-center"
                                 />
                             <img  
                             src={card.img2}

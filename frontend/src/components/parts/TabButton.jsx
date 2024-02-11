@@ -10,47 +10,56 @@ export default function TabButton( ){
     const [file2, setFile2] = useState();
     const [file3, setFile3] = useState();
     const [file4, setFile4] = useState();
+    const [img,setImg]=useState({file1:null,file2:null,file3:null,file4:null});
     const dispatch=useDispatch()
     function handleChange1(e) {
         if(e.target.files.length!=0){
-        console.log(e.target.files);
+        console.log(URL.createObjectURL(e.target.files[0]));
         setFile1(URL.createObjectURL(e.target.files[0]));
+        setImg({img,...{file1:URL.createObjectURL(e.target.files[0])}})
     }else{
         setFile1(null)
+        setImg({...img,...{file1:null}})
     }
     }
     function handleChange2(e) {
         if(e.target.files.length!=0){
-        console.log(e.target.files);
+        console.log(URL.createObjectURL(e.target.files[0]));
         setFile2(URL.createObjectURL(e.target.files[0]));
+        setImg({img,...{file2:e.target.files[0]}})
     }else{
         setFile2()
+        setImg({...img,...{file2:null}})
     }
     }
     function handleChange3(e) {
         if(e.target.files.length!=0){
         console.log(e.target.files);
         setFile3(URL.createObjectURL(e.target.files[0]));
+        setImg({img,...{file3:e.target.files[0]}})
     }else{
         setFile3()
+        setImg({...img,...{file3:null}})
     }
     }
     function handleChange4(e) {
         if(e.target.files.length!=0){
         console.log(e.target.files);
         setFile4(URL.createObjectURL(e.target.files[0]));
+        setImg({img,...{file4:e.target.files[0]}})
     }else{
         setFile4()
+        setImg({...img,...{file4:null}})
     }
     }
 
    
-    const handleSelectChange = (event) => {
+    const handleSelectChange = (event,img) => {
       const data=[event[0]?.value,event[1]?.value,event[2]?.value,event[3]?.value,event[4].value,event[5]?.value,event[6]?.value,event[7].value,event[8].value,event[9].value]
       setSelectedValue(data);
-    dispatch(addUser({location:event[9].value}))
-    dispatch(addUserCard([{productCat:event[0].value,productName:event[1].value,productDesc:event[2].value,productPrice:event[3].value,productImg:[{img1:event[4].value,img2:event[5].value,img3:event[6].value,img4:event[7].value}],productLoc:event[8].value,productCoord:event[9].value}]))
-      
+      dispatch (addUser({location:event[9].value}))
+      dispatch(addUserCard([{productCat:event[0].value,productName:event[1].value,productDesc:event[2].value,productPrice:event[3].value,productImg:[{img1:img.file1,img2:img.file2,img3:img.file3,img4:img.file4}],productLoc:event[8].value,productCoord:event[9].value}]))
+      console.log(event)
     };
     useEffect(()=>{
     console.log(selectedValue)
@@ -70,7 +79,7 @@ export default function TabButton( ){
                { 
                  e.preventDefault();
                   
-                 handleSelectChange(e.target);
+                 handleSelectChange(e.target,img);
                   }
                  } 
             className="space-y-4 md:space-y-6"  >
