@@ -1,7 +1,7 @@
 import { useEffect,useState ,useRef} from "react";
 import Google from "./Google";
 import { addUser,addUserCard } from "../utils/userSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch ,useSelector} from "react-redux";
 
 export default function TabButton( ){
     const [selectedValue, setSelectedValue] = useState([]);
@@ -10,6 +10,7 @@ export default function TabButton( ){
     const [file2, setFile2] = useState();
     const [file3, setFile3] = useState();
     const [file4, setFile4] = useState();
+    const databaseCard=useSelector((data)=>data.user.users)
     const [img,setImg]=useState({file1:null,file2:null,file3:null,file4:null});
     const dispatch=useDispatch()
     function handleChange1(e) {
@@ -58,12 +59,47 @@ export default function TabButton( ){
       const data=[event[0]?.value,event[1]?.value,event[2]?.value,event[3]?.value,event[4].value,event[5]?.value,event[6]?.value,event[7].value,event[8].value,event[9].value]
       setSelectedValue(data);
       dispatch (addUser({location:event[9].value}))
-      dispatch(addUserCard([{productCat:event[0].value,productName:event[1].value,productDesc:event[2].value,productPrice:event[3].value,productImg:[{img1:img.file1,img2:img.file2,img3:img.file3,img4:img.file4}],productLoc:event[8].value,productCoord:event[9].value}]))
-      console.log(event)
+      dispatch(addUserCard([{productCat:event[0].value,productName:event[1].value,productDesc:event[2].value,productPrice:event[3].value,productImg:[{img1:"file1",img2:"file2",img3:"file3",img4:"file4"}],productLoc:event[8].value,productCoord:event[9].value}]))
+      const username = databaseCard.username;
+      const email = databaseCard.email;
+      const newProducts = [[{"productCat":event[0].value,"productName":event[1].value,"productDesc":event[2].value,"productPrice":event[3].value,"productImg":[file1,file2,file3,file4]}]];
+      updateCard(username, email, newProducts);
+      console.log( )
     };
     useEffect(()=>{
     console.log(selectedValue)
     },[selectedValue])
+
+    async function updateCard(username, email, newProducts) {
+        const url = 'http://localhost:5000/cards';  // Replace with the actual endpoint URL
+      
+        try {
+          const response = await fetch(`${url}?username=${username}&email=${email}`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(newProducts),
+          });
+      
+          if (response.ok) {
+            const updatedCard = await response.json();
+            console.log('Updated Card:', updatedCard);
+            // Handle the updated card as needed
+          } else {
+            const errorData = await response.json();
+            console.error('Error updating card:', errorData);
+            // Handle the error as needed
+          }
+        } catch (error) {
+          console.error('Fetch error:', error);
+          // Handle fetch error
+        }
+      }
+      
+      // Example usage
+      
+
     return (
    <div>
   
