@@ -62,9 +62,9 @@ export default function TabButton( ){
       dispatch(addUserCard([{productCat:event[0].value,productName:event[1].value,productDesc:event[2].value,productPrice:event[3].value,productImg:[{img1:"file1",img2:"file2",img3:"file3",img4:"file4"}],productLoc:event[8].value,productCoord:event[9].value}]))
       const username = databaseCard.username;
       const email = databaseCard.email;
-      const newProducts = [[{"productCat":event[0].value,"productName":event[1].value,"productDesc":event[2].value,"productPrice":event[3].value,"productImg":[file1,file2,file3,file4]}]];
+      const newProducts = [[{"productCat":event[0].value,"productLocation":event[9].value,"productName":event[1].value,"productDesc":event[2].value,"productPrice":event[3].value,"productImg":[file1,file2,file3,file4]}]];
       updateCard(username, email, newProducts);
-      console.log( )
+ 
     };
     useEffect(()=>{
     console.log(selectedValue)

@@ -1,9 +1,37 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
- 
+import { useSelector,useDispatch } from 'react-redux';
+import { addUserCard } from '../utils/userSlice';
 const SideBar = () => {
+  const databaseCard=useSelector((data)=>data.user.users);
+  const [totalProducts,settotalProducts]=useState(0);
   const auth=localStorage.getItem('user');
-  
+ 
+  async function getProductArrayLength(username, email) {
+   try {
+     const response = await fetch(`http://localhost:5000/products/length?username=${username}&email=${email}`);
+ 
+     if (response.ok) {
+       const data = await response.json();
+       settotalProducts(data.productArrayLength)
+    
+       console.log('Product Array Length:', data.productArrayLength);
+     } else {
+       const errorData = await response.json();
+       console.error('Error:', errorData);
+     }
+   } catch (error) {
+     console.error('Fetch error:', error);
+   }
+ }
+ 
+ useEffect(()=>{
+   // Example usage
+   const username = databaseCard.username;
+   const email = databaseCard.email;
+   console.log(username,email)
+   if(username) getProductArrayLength(username, email);
+ },[databaseCard,totalProducts])
   return ( 
     <div className='h-full min-h-screen'>
    <div id="sidebar-multi-level-sidebar" className=" h-full min-h-screen z-40 w-64 " >
@@ -34,6 +62,7 @@ const SideBar = () => {
                   <path d="M14 2a3.963 3.963 0 0 0-1.4.267 6.439 6.439 0 0 1-1.331 6.638A4 4 0 1 0 14 2Zm1 9h-1.264A6.957 6.957 0 0 1 15 15v2a2.97 2.97 0 0 1-.184 1H19a1 1 0 0 0 1-1v-1a5.006 5.006 0 0 0-5-5ZM6.5 9a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9ZM8 10H5a5.006 5.006 0 0 0-5 5v2a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-2a5.006 5.006 0 0 0-5-5Z"/>
                </svg>
                <span className="flex-1 ms-3 whitespace-nowrap">Your Products</span>
+               <span className="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-blue-800 bg-blue-100 rounded-full dark:bg-blue-900 dark:text-blue-300">{totalProducts}</span>
             </Link>
          </li>
          <li>

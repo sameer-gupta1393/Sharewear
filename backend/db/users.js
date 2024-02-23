@@ -11,6 +11,7 @@ const userSchema=new mongoose.Schema({   //  { "name": "swayam","email":"fse","p
     name:String,
     email:String,
     password:String,
+    Location:String,
     products:[
     {
       type: [productSchema],

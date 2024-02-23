@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import SideBar from './parts/SideBar'
 import Cards from './parts/Cards'
 import { BrowserRouter, Route, Routes,Link, Outlet,useNavigate, Navigate } from 'react-router-dom'
@@ -6,9 +6,22 @@ import Page3 from './Page3'
 import Page2 from './Page2'
 import Login from './parts/Login'
 import Signup from './parts/Signup'
+import { useDispatch } from 'react-redux'
+import { addUser } from './utils/userSlice'
 const Page1 = () => {
+
   const navigate=useNavigate();
-  const auth=localStorage.getItem('user');
+  let auth=localStorage.getItem('user');
+  const dispatch=useDispatch()
+  useEffect(()=>{
+    if(auth) {
+      // auth=JSON.parse(auth);
+      const auth2 = JSON.parse(auth);
+      dispatch(addUser({username:auth2.name,email:auth2.email}));
+      console.log(auth2.name)
+    }
+    
+  })
   const logout=()=>{
     localStorage.clear();
     navigate('/signup')

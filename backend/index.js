@@ -77,4 +77,25 @@ app.put('/cards', async (req, res) => {// [[{"productName":"kurta2","productDesc
       res.status(500).json({ error: 'Internal Server Error' });
     }
   });
+  // API endpoint to get the product array length for a user
+app.get('/products/length', async (req, res) => {
+  const { username, email } = req.query;
+
+  try {
+    // Find the user based on the provided username and email
+    const user = await User.findOne({ name: username, email: email });
+
+    if (user) {
+      // Return the length of the products array
+      res.json({ productArrayLength: user.products.length ,productsArray:user.products});
+    } else {
+      // If user is not found, return an error
+      res.status(404).json({ error: 'User not found' });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
 app.listen(5000)

@@ -17,7 +17,8 @@ const userSlice=createSlice({
         
     ,
         addUserCard:(state,action)=>{
-            state.users.cards.push([action.payload]);
+            state.users.cards=action.payload;
+            console.log(action.payload)
         },
         clearCart:(state)=>{ //if u dont need action u can remove that like in above
             state.items.length=0;//or u can return [items:[]] // it will be passed to state
