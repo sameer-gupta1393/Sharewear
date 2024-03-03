@@ -1,9 +1,13 @@
 const express=require('express')
 const cors=require("cors")
+const multer = require('multer');
+const cloudinary = require('cloudinary').v2;
 require('./db/config')
 const path=require('path')
 const User=require("./db/users")
 const app=express()
+const dotenv=require('dotenv');
+dotenv.config();
 app.use(cors())
 app.use(express.json())
 app.post('/register',async(req,res)=>{
@@ -86,5 +90,37 @@ app.get('/products/length', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+// Set up Cloudinary configuration (replace with your Cloudinary credentials)
+cloudinary.config({
+  cloud_name:process.env.CLOUD_NAME,
+  api_key:process.env.API_KEY,
+  api_secret: process.env.API_SECRET,
+});
 
+// Set up multer to handle file uploads
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
+
+app.post('/uploading', upload.single('file'), async (req, res) => {
+  try {
+    // Upload the file to Cloudinary
+    const result = await cloudinary.uploader.upload_stream(
+      { resource_type: 'auto' },
+      (error, result) => {
+        if (error) {
+          console.error('Error uploading to Cloudinary:', error);
+          res.status(500).json({ error: 'Internal Server Error' });
+        } else {
+          console.log('File uploaded to Cloudinary:', result);
+
+          // Additional processing or response to the client
+          res.json({  url: result.url });
+        }
+      }
+    ).end(req.file.buffer);
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
 app.listen(5000)

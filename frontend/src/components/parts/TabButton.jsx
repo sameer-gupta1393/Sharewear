@@ -1,5 +1,6 @@
 import { useEffect,useState ,useRef} from "react";
 import { Spinner,Button  } from "@material-tailwind/react";
+
 import Google from "./Google";
 import { addUser,addUserCard } from "../utils/userSlice";
 import { useDispatch ,useSelector} from "react-redux";
@@ -16,8 +17,8 @@ export default function TabButton( ){
     const [fileS2, setFileS2] = useState();
     const [fileS3, setFileS3] = useState();
     const [fileS4, setFileS4] = useState();
-    const preset_key="myRentalCloud";
-    const cloud_name="dmp0bxmhb";
+  
+    
     let [change,setChange]=useState(true);
     const databaseCard=useSelector((data)=>data.user.users)
     const [img,setImg]=useState({file1:null,file2:null,file3:null,file4:null});
@@ -95,7 +96,7 @@ export default function TabButton( ){
  const handleBoth=async(data)=>{
   const urls = await uploadImages( [fileS1, fileS2, fileS3, fileS4]);
   console.log("URL URL ::" ,urls)
-  const newProducts = [[{"productCat":data[0],"productLocation":data[1],"productName":data[2],"productDesc":data[3],"productPrice":data[4],"productImg":[urls[0],urls[1],urls[2],urls[4]]}]];
+  const newProducts = [[{"productCat":data[0],"productLocation":data[1],"productName":data[2],"productDesc":data[3],"productPrice":data[4],"productImg":[urls[0],urls[1],urls[2],urls[3]]}]];
   await updateCard(newProducts);
  }
  const uploadImages = async (files) => {
@@ -106,17 +107,20 @@ export default function TabButton( ){
         if (file) {
           const formData = new FormData();
           formData.append('file', file);
-          formData.append('upload_preset', preset_key);
-          formData.append('cloud_name', cloud_name);
+  
           formDataArray.push({ formData, index });
         }
       });
     
       const uploadPromises = formDataArray.map(async ({ formData, index }) => {
-        const res = await fetch(`https://api.cloudinary.com/v1_1/${cloud_name}/image/upload`, {
+        for (const [key, value] of formData.entries()) {
+          console.log(`${key}: ${value}`);
+        }
+        const res = await fetch(`http://localhost:5000/uploading`, {
           method: 'POST',
           body: formData,
         });
+        
         const clouddata = await res.json();
         uploadedUrls[index] = clouddata.url;
         console.log(`Uploaded image ${index + 1}: ${clouddata.url}`);
