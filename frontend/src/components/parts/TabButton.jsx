@@ -1,8 +1,10 @@
 import { useEffect,useState ,useRef} from "react";
+import { Spinner,Button  } from "@material-tailwind/react";
 import Google from "./Google";
 import { addUser,addUserCard } from "../utils/userSlice";
 import { useDispatch ,useSelector} from "react-redux";
-
+import {toast,Toaster} from "react-hot-toast"
+import { DefaultSkeleton } from "../utils/DefaultSkeletion";
 export default function TabButton( ){
     const [selectedValue, setSelectedValue] = useState([]);
     //setting images 
@@ -10,6 +12,13 @@ export default function TabButton( ){
     const [file2, setFile2] = useState();
     const [file3, setFile3] = useState();
     const [file4, setFile4] = useState();
+    const [fileS1, setFileS1] = useState();
+    const [fileS2, setFileS2] = useState();
+    const [fileS3, setFileS3] = useState();
+    const [fileS4, setFileS4] = useState();
+    const preset_key="myRentalCloud";
+    const cloud_name="dmp0bxmhb";
+    let [change,setChange]=useState(true);
     const databaseCard=useSelector((data)=>data.user.users)
     const [img,setImg]=useState({file1:null,file2:null,file3:null,file4:null});
     const dispatch=useDispatch()
@@ -17,9 +26,11 @@ export default function TabButton( ){
         if(e.target.files.length!=0){
         console.log(URL.createObjectURL(e.target.files[0]));
         setFile1(URL.createObjectURL(e.target.files[0]));
+        setFileS1((e.target.files[0]))
         setImg({img,...{file1:URL.createObjectURL(e.target.files[0])}})
     }else{
         setFile1(null)
+        setFileS1(null)
         setImg({...img,...{file1:null}})
     }
     }
@@ -27,9 +38,11 @@ export default function TabButton( ){
         if(e.target.files.length!=0){
         console.log(URL.createObjectURL(e.target.files[0]));
         setFile2(URL.createObjectURL(e.target.files[0]));
+        setFileS2((e.target.files[0]))
         setImg({img,...{file2:e.target.files[0]}})
     }else{
         setFile2()
+        setFileS2(null)
         setImg({...img,...{file2:null}})
     }
     }
@@ -37,42 +50,95 @@ export default function TabButton( ){
         if(e.target.files.length!=0){
         console.log(e.target.files);
         setFile3(URL.createObjectURL(e.target.files[0]));
+        setFileS3((e.target.files[0]))
         setImg({img,...{file3:e.target.files[0]}})
     }else{
         setFile3()
         setImg({...img,...{file3:null}})
+        setFileS3(null)
     }
     }
     function handleChange4(e) {
         if(e.target.files.length!=0){
         console.log(e.target.files);
         setFile4(URL.createObjectURL(e.target.files[0]));
+        setFileS4((e.target.files[0]))
         setImg({img,...{file4:e.target.files[0]}})
     }else{
         setFile4()
+        setFileS4(null)
         setImg({...img,...{file4:null}})
     }
     }
 
    
-    const handleSelectChange = (event,img) => {
+    const handleSelectChange = async(event,img) => {
       const data=[event[0]?.value,event[1]?.value,event[2]?.value,event[3]?.value,event[4].value,event[5]?.value,event[6]?.value,event[7].value,event[8].value,event[9].value]
       setSelectedValue(data);
       dispatch (addUser({location:event[9].value}))
       dispatch(addUserCard([{productCat:event[0].value,productName:event[1].value,productDesc:event[2].value,productPrice:event[3].value,productImg:[{img1:"file1",img2:"file2",img3:"file3",img4:"file4"}],productLoc:event[8].value,productCoord:event[9].value}]))
-      const username = databaseCard.username;
-      const email = databaseCard.email;
-      const newProducts = [[{"productCat":event[0].value,"productLocation":event[9].value,"productName":event[1].value,"productDesc":event[2].value,"productPrice":event[3].value,"productImg":[file1,file2,file3,file4]}]];
-      updateCard(username, email, newProducts);
- 
+      setChange(false)
+      await toast.promise(
+        handleBoth([event[0].value,event[9].value],event[1].value,event[2].value,event[3].value)
+      ,
+      {
+        loading: 'Saving Card...',
+        success: <b>Card saved!</b>,
+        error: <b>Could not save.</b>,
+      }
+    );
+    setTimeout(() => {
+      window.location.reload();
+    }, 1500);
+
     };
+ const handleBoth=async(data)=>{
+  const urls = await uploadImages( [fileS1, fileS2, fileS3, fileS4]);
+  console.log("URL URL ::" ,urls)
+  const newProducts = [[{"productCat":data[0],"productLocation":data[1],"productName":data[2],"productDesc":data[3],"productPrice":data[4],"productImg":[urls[0],urls[1],urls[2],urls[4]]}]];
+  await updateCard(newProducts);
+ }
+ const uploadImages = async (files) => {
+      const formDataArray = [];
+      const uploadedUrls = [];
+    
+      files.forEach((file, index) => {
+        if (file) {
+          const formData = new FormData();
+          formData.append('file', file);
+          formData.append('upload_preset', preset_key);
+          formData.append('cloud_name', cloud_name);
+          formDataArray.push({ formData, index });
+        }
+      });
+    
+      const uploadPromises = formDataArray.map(async ({ formData, index }) => {
+        const res = await fetch(`https://api.cloudinary.com/v1_1/${cloud_name}/image/upload`, {
+          method: 'POST',
+          body: formData,
+        });
+        const clouddata = await res.json();
+        uploadedUrls[index] = clouddata.url;
+        console.log(`Uploaded image ${index + 1}: ${clouddata.url}`);
+      });
+    
+      await Promise.all(uploadPromises);
+    
+      return uploadedUrls;
+    };
+    
+    
     useEffect(()=>{
     console.log(selectedValue)
     },[selectedValue])
 
-    async function updateCard(username, email, newProducts) {
+    async function updateCard( newProducts) {
         const url = 'http://localhost:5000/cards';  // Replace with the actual endpoint URL
-      
+        
+        const auth=localStorage.getItem('user')
+        const auth2=JSON.parse(auth)
+        const username=auth2.name
+        const email=auth2.email
         try {
           const response = await fetch(`${url}?username=${username}&email=${email}`, {
             method: 'PUT',
@@ -102,12 +168,15 @@ export default function TabButton( ){
 
     return (
    <div>
-  
-    <section className="bg-gray-100 dark:bg-gray-900">
+    <Toaster
+  position="bottom-center"
+  reverseOrder={false}
+/>
+    <section className="bg-gray-100 dark:bg-gray-900  min-h-[100vh]">
      <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto lg:py-0">
        
       <div className="w-full bg-white rounded-lg shadow dark:border md:my-10 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
-          <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
+          {change?<div className="p-6 space-y-4 md:space-y-6 sm:p-8">
               <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
                   Rent Your Product
               </h1>
@@ -189,7 +258,11 @@ export default function TabButton( ){
                   <button type="submit"   className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Rent</button>
                   
               </form>
-          </div>
+          </div>: <div className="p-[20px] flex flex-col items-center"><DefaultSkeleton /><hr/><DefaultSkeleton/> 
+           <Button className="w-[50%]" variant="filled" disabled><Spinner className="h-6 w-6 inline"/> Processing ...</Button>
+           </div>
+                    }
+          
       </div>
   </div>
 </section>

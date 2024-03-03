@@ -1,6 +1,16 @@
-import React from "react"
+import React,{useEffect} from "react"
 import Cards from "./Cards";
+import { useNavigate } from "react-router-dom";
 const Grid=()=>{
+  const navigate=useNavigate()
+  const auth=localStorage.getItem("user")
+  useEffect(()=>{
+    if(auth){
+
+    }else{
+      navigate("/login")
+    }
+  })
     return (
       
        /* Main Content Grid */

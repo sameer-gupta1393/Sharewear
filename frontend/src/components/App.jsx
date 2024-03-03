@@ -12,6 +12,7 @@ import appStore from './utils/appStore'
 const App = () => {
    // is key 
   // return auth?<Outlet/>:<Navigate to="/signup"/>
+  
   const appRouter=createBrowserRouter([
     {
       path:"/",
