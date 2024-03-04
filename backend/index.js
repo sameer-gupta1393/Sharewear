@@ -5,6 +5,7 @@ const cloudinary = require('cloudinary').v2;
 require('./db/config')
 const path=require('path')
 const User=require("./db/users")
+const Product=require("./db/products")
 const app=express()
 const dotenv=require('dotenv');
 dotenv.config();
@@ -46,37 +47,56 @@ app.post('/login',async (req,res)=>{
   
 })
 //http://localhost:5000/cards?username=swayam&email=fse
-app.put('/cards', async (req, res) => {// [[{"productName":"kurta2","productDesc":"size M","productPrice":7990,"productImg":["fscsddf","scdv","fcsd"]}]]
-    const { username ,email } = req.query;
-  
-    // Define the new products to add
+ // [[{"productName":"kurta2","productDesc":"size M","productPrice":7990,"productImg":["fscsddf","scdv","fcsd"]}]]
+ 
+  // new model schema --
+  app.put('/cards', async (req, res) => {
+    // const userID = req.params.id;
+    const { userName,userID } = req.query;
     const newProducts = req.body;
-  
+
     try {
-      // Find the existing Card document and update the arrays
-      const updatedCard = await User.findOneAndUpdate(
-        { name: username,email:email },
-        { $push: { products: { $each: newProducts } } },
-        { new: true } // Return the updated document
-      );
-  
-      if (updatedCard) {
-        res.json(updatedCard);
-      } else {
-        res.status(404).json({ error: 'Card not found' });
-      }
+        // Find the existing Card document
+        let existingCard = await Product.findOne({ userID: userID });
+
+        if (!existingCard) {
+            // If the card doesn't exist, create a new one
+            existingCard = new Product({
+                userID: userID,
+                name: userName,
+                products: newProducts,
+            });
+
+            await existingCard.save();
+            res.json(existingCard);
+        } else {
+            // If the card exists, update the products array
+            const updatedCard = await Product.findOneAndUpdate(
+                { userID: userID },
+                { $push: { products: { $each: newProducts } } },
+                { new: true }
+            );
+
+            if (updatedCard) {
+                res.json(updatedCard);
+            } else {
+                res.status(500).json({ error: 'Error updating the card' });
+            }
+        }
     } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Internal Server Error' });
+        console.error(error);
+        res.status(500).json({ error: 'Internal Server Error' });
     }
-  });
+});
+
+
   // API endpoint to get the product array length for a user
 app.get('/products/length', async (req, res) => {
-  const { username, email } = req.query;
+  const { userID} = req.query;
 
   try {
     // Find the user based on the provided username and email
-    const user = await User.findOne({ name: username, email: email });
+    const user = await Product.findOne({ userID: userID});
 
     if (user) {
       // Return the length of the products array
@@ -123,4 +143,16 @@ app.post('/uploading', upload.single('file'), async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+app.get('/products', async (req, res) => {
+    const {userID}=req.query
+  try{
+      const response=await Product.findOne({userID:userID});
+      res.send(response.products)
+      console.log(response)
+  }catch(e){
+      res.send({err:e})
+      console.log(response)
+  }
+
+})
 app.listen(5000)

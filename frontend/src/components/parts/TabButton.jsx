@@ -20,7 +20,7 @@ export default function TabButton( ){
   
     
     let [change,setChange]=useState(true);
-    const databaseCard=useSelector((data)=>data.user.users)
+    
     const [img,setImg]=useState({file1:null,file2:null,file3:null,file4:null});
     const dispatch=useDispatch()
     function handleChange1(e) {
@@ -75,12 +75,29 @@ export default function TabButton( ){
    
     const handleSelectChange = async(event,img) => {
       const data=[event[0]?.value,event[1]?.value,event[2]?.value,event[3]?.value,event[4].value,event[5]?.value,event[6]?.value,event[7].value,event[8].value,event[9].value]
+      let lat_long=document.getElementById('currentLocationCheckbox').value;
       setSelectedValue(data);
+     
       dispatch (addUser({location:event[9].value}))
       dispatch(addUserCard([{productCat:event[0].value,productName:event[1].value,productDesc:event[2].value,productPrice:event[3].value,productImg:[{img1:"file1",img2:"file2",img3:"file3",img4:"file4"}],productLoc:event[8].value,productCoord:event[9].value}]))
+      if(fileS1||fileS2||fileS3||fileS4){
+        
+      }else{
+         
+        toast((t) => (
+          <span>
+            <b> min 1 photo upload ! </b>
+            <button className="bg-red-500 text-white px-2 py-1 rounded focus:outline-none hover:bg-red-600" onClick={() => toast.dismiss(t.id)}>
+              Dismiss
+            </button>
+          </span>
+        ));
+        return;
+      }
       setChange(false)
+     
       await toast.promise(
-        handleBoth([event[0].value,event[9].value],event[1].value,event[2].value,event[3].value)
+        handleBoth([event[0].value,event[9].value,event[1].value,event[2].value,event[3].value,lat_long])
       ,
       {
         loading: 'Saving Card...',
@@ -95,8 +112,9 @@ export default function TabButton( ){
     };
  const handleBoth=async(data)=>{
   const urls = await uploadImages( [fileS1, fileS2, fileS3, fileS4]);
-  console.log("URL URL ::" ,urls)
-  const newProducts = [[{"productCat":data[0],"productLocation":data[1],"productName":data[2],"productDesc":data[3],"productPrice":data[4],"productImg":[urls[0],urls[1],urls[2],urls[3]]}]];
+  console.log("URL URL ::" ,urls,"data data ::",data)
+
+  const newProducts = [[{"productCat":data[0],"lat_long":data[5],"productLoc":data[1],"productName":data[2],"productDesc":data[3],"productPrice":data[4],"productImg":[urls[0],urls[1],urls[2],urls[3]]}]];
   await updateCard(newProducts);
  }
  const uploadImages = async (files) => {
@@ -135,16 +153,16 @@ export default function TabButton( ){
     useEffect(()=>{
     console.log(selectedValue)
     },[selectedValue])
-
+    
+    const auth=JSON.parse(localStorage.getItem('user'))
+    const userID=auth._id
+    const userName=auth.name
     async function updateCard( newProducts) {
-        const url = 'http://localhost:5000/cards';  // Replace with the actual endpoint URL
+        const url =`http://localhost:5000/cards?userID=${userID}&userName=${userName}`;  // Replace with the actual endpoint URL
         
-        const auth=localStorage.getItem('user')
-        const auth2=JSON.parse(auth)
-        const username=auth2.name
-        const email=auth2.email
+        
         try {
-          const response = await fetch(`${url}?username=${username}&email=${email}`, {
+          const response = await fetch(`${url}`, {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json',
@@ -173,7 +191,7 @@ export default function TabButton( ){
     return (
    <div>
     <Toaster
-  position="bottom-center"
+  position="top-center"
   reverseOrder={false}
 />
     <section className="bg-gray-100 dark:bg-gray-900  min-h-[100vh]">

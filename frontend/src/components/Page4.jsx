@@ -8,26 +8,21 @@ import {
   } from "@material-tailwind/react";
  
 import { Carousel } from "@material-tailwind/react";
-import { useSelector,useDispatch } from 'react-redux';
-import { addUserCard } from './utils/userSlice';
-import { useEffect } from "react";
+ 
+import { useEffect, useState } from "react";
   export default function EcommerceCard() {
-    const databaseCard=useSelector((data)=>data.user.users);
+    
 
-    const data=useSelector((state)=>state.user.users.cards)
-
-    console.log(data)
-    const auth=localStorage.getItem('user');
-    const dispatch =useDispatch()
-    async function getProductArrayLength(username, email) {
+    const [data,setData]=useState([])
+    const auth=JSON.parse(localStorage.getItem('user'))._id;
+    
+    async function getProductArray() {
      try {
-       const response = await fetch(`http://localhost:5000/products/length?username=${username}&email=${email}`);
+       const response = await fetch(`http://localhost:5000/products?userID=${auth}`);
    
        if (response.ok) {
-         const data = await response.json();
-       
-         dispatch(addUserCard(data.productsArray))
-         console.log(data.productsArray)
+         const data2 = await response.json();
+         setData(data2)
      
        } else {
          const errorData = await response.json();
@@ -40,39 +35,39 @@ import { useEffect } from "react";
    
    useEffect(()=>{
      // Example usage
-     const username = databaseCard.username;
-     const email = databaseCard.email;
- 
-     if(username) getProductArrayLength(username, email);
+     console.log("check ceck")
+     if(auth) getProductArray();
    },[])
     const ProductCard=(props)=>{
         const card=props.info[0].productImg
+        const {productName,productPrice,productDesc}=props.info[0];
+        
         console.log(card)
         return (
-            <Card className="">
+            <Card className="w-full">
              <CardHeader shadow={false} floated={false} className="h-[200px]">
                 <Carousel className="rounded-xl page2div5">
                     
-                           <img  
-                              src={card.img1}
+                           {card[0]&&<img  
+                              src={card[0]}
                               alt="image 1"
                               className="h-full w-full object-cover object-center"
-                                />
-                            <img  
-                            src={card.img2}
-                            alt="image 1"
-                            className="h-full w-full object-cover object-center"
-                        />
-                            <img  
-                            src={card.img3}
-                            alt="image 1"
-                            className="h-full w-full object-cover object-center"
-                        />
-                            <img  
-                            src={card.img4}
-                            alt="image 1"
-                            className="h-full w-full object-cover object-center"
-                        />
+                                />}
+                             {card[1]&&<img  
+                              src={card[1]}
+                              alt="image 1"
+                              className="h-full w-full object-cover object-center"
+                                />}
+                              {card[2]&&<img  
+                              src={card[2]}
+                              alt="image 1"
+                              className="h-full w-full object-cover object-center"
+                                />}
+                              {card[3]&&<img  
+                              src={card[3]}
+                              alt="image 1"
+                              className="h-full w-full object-cover object-center"
+                                />}
            
                
             
@@ -81,10 +76,13 @@ import { useEffect } from "react";
         <CardBody>
           <div className="mb-2 flex items-center justify-between">
             <Typography color="blue-gray" className="font-medium">
-              Apple AirPods
+                {productName}
             </Typography>
             <Typography color="blue-gray" className="font-medium">
-              $95.00
+            <div className="bg-green-500 text-white rounded-md px-1">
+                <span className=" text-[15px] ">₹ &nbsp;</span>
+                <span className=" text-[15px]  ">{productPrice}</span>
+              </div>
             </Typography>
           </div>
           <Typography
@@ -92,17 +90,16 @@ import { useEffect } from "react";
             color="gray"
             className="font-normal opacity-75"
           >
-            With plenty of talk and listen time, voice-activated Siri access, and
-            an available wireless charging case.
+            {productDesc}
           </Typography>
         </CardBody>
         <CardFooter className="pt-0">
           <Button
             ripple={false}
             fullWidth={true}
-            className="bg-blue-gray-900/10 text-blue-gray-900 shadow-none hover:scale-105 hover:shadow-none focus:scale-105 focus:shadow-none active:scale-100"
+            className="bg-red-500 text-white px-2 py-1 rounded-lg focus:outline-none hover:bg-red-600"
           >
-            Add to Cart
+            REMOVE
           </Button>
         </CardFooter>
       </Card>
@@ -113,8 +110,8 @@ import { useEffect } from "react";
        {/* Card 1 */}
        {data.map((item,id)=>{
          return (
-            <div key={id} className="flex items-stretch "> 
-               <ProductCard info={item}/>
+            <div key={id} className="flex items-stretch  "> 
+               <ProductCard info={item} />
             </div>
          )
        })}

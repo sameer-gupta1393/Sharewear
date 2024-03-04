@@ -7,9 +7,9 @@ const SideBar = () => {
   const [totalProducts,settotalProducts]=useState(0);
   const auth=localStorage.getItem('user');
  
-  async function getProductArrayLength(username, email) {
+  async function getProductArrayLength(userID) {
    try {
-     const response = await fetch(`http://localhost:5000/products/length?username=${username}&email=${email}`);
+     const response = await fetch(`http://localhost:5000/products/length?userID=${userID}`);
  
      if (response.ok) {
        const data = await response.json();
@@ -24,14 +24,11 @@ const SideBar = () => {
      console.error('Fetch error:', error);
    }
  }
- 
+
  useEffect(()=>{
    // Example usage
-   const username = databaseCard.username;
-   const email = databaseCard.email;
-   console.log(username,email)
-   if(username) getProductArrayLength(username, email);
- },[databaseCard,totalProducts])
+   if(auth)getProductArrayLength(JSON.parse(auth)._id);
+ },[])
   return ( 
     <div className='h-full min-h-screen'>
    <div id="sidebar-multi-level-sidebar" className=" h-full min-h-screen z-40 w-64 " >
