@@ -2,7 +2,7 @@ import { useEffect,useState ,useRef} from "react";
 import { Spinner,Button  } from "@material-tailwind/react";
 
 import Google from "./Google";
-import { addUser,addUserCard } from "../utils/userSlice";
+import { addUser  } from "../utils/userSlice";
 import { useDispatch ,useSelector} from "react-redux";
 import {toast,Toaster} from "react-hot-toast"
 import { DefaultSkeleton } from "../utils/DefaultSkeletion";
@@ -78,8 +78,7 @@ export default function TabButton( ){
       let lat_long=document.getElementById('currentLocationCheckbox').value;
       setSelectedValue(data);
      
-      dispatch (addUser({location:event[9].value}))
-      dispatch(addUserCard([{productCat:event[0].value,productName:event[1].value,productDesc:event[2].value,productPrice:event[3].value,productImg:[{img1:"file1",img2:"file2",img3:"file3",img4:"file4"}],productLoc:event[8].value,productCoord:event[9].value}]))
+       
       if(fileS1||fileS2||fileS3||fileS4){
         
       }else{

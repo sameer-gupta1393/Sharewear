@@ -12,16 +12,16 @@ const Page1 = () => {
 
   const navigate=useNavigate();
   let auth=localStorage.getItem('user');
-  const dispatch=useDispatch()
+  
+
   useEffect(()=>{
     if(auth) {
       // auth=JSON.parse(auth);
-      const auth2 = JSON.parse(auth);
-      dispatch(addUser({username:auth2.name,email:auth2.email}));
-      console.log(auth2.name)
+       
+    
     }
     
-  })
+  },[])
   const logout=()=>{
     localStorage.clear();
     navigate('/signup')

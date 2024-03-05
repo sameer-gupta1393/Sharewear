@@ -22,12 +22,7 @@ app.post('/register',async(req,res)=>{
 app.post('',(req,res)=>{
   console.log(req.file)
 })
-// app.put('/upload',upload.array('files',4),async (req,res)=>{
-//     console.log(req.body)
-//     let db=await dbConnection()
-//     let result=await db.updateOne({name:req.params.name},{$set:req.body})
-//     res.send(result)
-// })
+ 
 app.post('/login',async (req,res)=>{
     
     
@@ -151,8 +146,14 @@ app.get('/products', async (req, res) => {
       console.log(response)
   }catch(e){
       res.send({err:e})
-      console.log(response)
+  
   }
 
+})
+
+//getting all cards data fromm products
+app.get("/getProducts",async(req,res)=>{
+  const response=await Product.find();
+  res.send(response);
 })
 app.listen(5000)

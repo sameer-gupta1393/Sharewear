@@ -1,16 +1,36 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-const Cards = () => {
+const Cards = ({info}) => {
+  console.log(info)
+  let url=null;
+  let j=0;
+  
+  while(url==null){
+    url=info[2][0].productImg[j];
+    j++;
+  }
   return (
-    <div className="max-w-sm rounded overflow-hidden shadow-lg h-[300px] bg-white">
-     <img className="w-full h-[50%] object-cover object-top" src="https://projectbandi.com/cdn/shop/products/IMG_5995.jpg?v=1573801843" alt="Sunset in the mountains"/>
-  <div className="px-6 py-4">
-    <div className="font-bold text-xl mb-2">The Coldest Sunset</div>
-    <p className="text-gray-700 text-base">
-      Lorem ipsum dolor sit amet.
+    <div className="max-w-sm rounded overflow-hidden shadow-lg h-[310px] bg-white w-full">
+     <img className="w-full h-[50%] object-cover object-top" src={url} alt="Sunset in the mountains"/>
+     
+   <div className="px-6 pt-4">
+    <div className="font-bold text-xl">{info[2][0].productName}
+    <span className=" float-right bg-purple-100 text-purple-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-purple-900 dark:text-purple-300">
+       {info[2][0].productCat}</span></div>
+    
+ 
+    <p className="text-gray-700 text-base inline">
+      {info[2][0].productDesc}
     </p>
+    <div className="bg-green-500 text-white rounded-md px-1 inline float-right">
+                <span className=" text-[15px] ">₹ &nbsp;</span>
+                <span className=" text-[15px]  ">{info[2][0].productPrice}</span>
+              </div>
   </div>
-  <div className="px-6 pt-4  flex justify-between">
+  <p className="text-gray-700 text-[10px] px-6  h-fit m-0 text-base inline">
+      owner-<b>{info[1]}</b>
+    </p>
+  <div className="px-6 py-4  flex justify-between">
         <Link to="/card" className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-brown-500 rounded-lg hover:bg-stone-800 focus:ring-4 focus:outline-none focus:ring-stone-300 dark:bg-stone-600 dark:hover:bg-stone-700 dark:focus:ring-stone-800">
             Rent it  
         </Link>

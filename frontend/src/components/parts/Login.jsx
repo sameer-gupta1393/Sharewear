@@ -29,8 +29,10 @@ const Login = ( ) => {
     console.log(result)
     if(result.name){
       localStorage.setItem('user',JSON.stringify(result))
-      dispatch(addUser({username:result.name,email:result.email}))
+      console.log("result",result)
+      dispatch(addUser({name:result.name,email:result.email,id:result._id}))
       navigate("/ ")
+      
     }else{
       alert("please enter correct details")
     }
@@ -48,8 +50,8 @@ const Login = ( ) => {
       console.log(result)
       localStorage.setItem("user",JSON.stringify(result)) //The JSON.stringify() static method converts a JavaScript value to a JSON string, optionally replacing values if a replacer function is specified or optionally including only the specified properties if a replacer array is specified.
       if(result){
-        dispatch(addUser({username:result.name,email:result.email}))
-        navigate('/')
+        dispatch(addUser({name:result.name,email:result.email,id:result._id}))
+        navigate('/') 
       }
     }
   

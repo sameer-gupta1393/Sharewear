@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useSelector,useDispatch } from 'react-redux';
-import { addUserCard } from '../utils/userSlice';
+ 
 const SideBar = () => {
-  const databaseCard=useSelector((data)=>data.user.users);
+   
   const [totalProducts,settotalProducts]=useState(0);
   const auth=localStorage.getItem('user');
- 
-  async function getProductArrayLength(userID) {
+   
+  const userData = useSelector((state) => state.user);
+
+  async function getProductArrayLength() {
    try {
-     const response = await fetch(`http://localhost:5000/products/length?userID=${userID}`);
+     const url=userData.id?userData.id:JSON.parse(auth)._id;
+     const response = await fetch(`http://localhost:5000/products/length?userID=${url}`);
  
      if (response.ok) {
        const data = await response.json();
@@ -19,6 +22,7 @@ const SideBar = () => {
      } else {
        const errorData = await response.json();
        console.error('Error:', errorData);
+       settotalProducts(0)
      }
    } catch (error) {
      console.error('Fetch error:', error);
@@ -27,8 +31,8 @@ const SideBar = () => {
 
  useEffect(()=>{
    // Example usage
-   if(auth)getProductArrayLength(JSON.parse(auth)._id);
- },[])
+   if(auth)getProductArrayLength();
+ },[userData])
   return ( 
     <div className='h-full min-h-screen'>
    <div id="sidebar-multi-level-sidebar" className=" h-full min-h-screen z-40 w-64 " >

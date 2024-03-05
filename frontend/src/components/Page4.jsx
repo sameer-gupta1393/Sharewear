@@ -22,8 +22,14 @@ import { useEffect, useState } from "react";
    
        if (response.ok) {
          const data2 = await response.json();
-         setData(data2)
-     
+         if(data2.err){
+            setData([])
+         }
+         else{
+          setData(data2)
+          console.log(data2)
+         }
+         
        } else {
          const errorData = await response.json();
          console.error('Error:', errorData);
@@ -107,14 +113,17 @@ import { useEffect, useState } from "react";
     }
     return (
         <div className="col-span-3 p-2 overflow-hidden grid grid-cols-3 gap-4 ">
-       {/* Card 1 */}
-       {data.map((item,id)=>{
+       
+       { 
+        
+        data.map((item,id)=>{
          return (
             <div key={id} className="flex items-stretch  "> 
                <ProductCard info={item} />
             </div>
          )
-       })}
+       }
+       )}
       
      
       </div>
