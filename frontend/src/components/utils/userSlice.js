@@ -7,6 +7,7 @@ const userSlice=createSlice({
             location:null,
             email:null,
             id:null,
+            wishlist:null
         }
     ,
     reducers:{

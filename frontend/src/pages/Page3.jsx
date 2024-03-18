@@ -1,6 +1,6 @@
  
 import { Link } from 'react-router-dom';
-import TabButton from './parts/TabButton';
+import TabButton from '../components/parts/TabButton';
  
  
 export default function Page3() {

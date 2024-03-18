@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react'
-import SideBar from './parts/SideBar'
-import Cards from './parts/Cards'
+import SideBar from '../components/parts/SideBar'
+import Cards from '../components/parts/Cards'
 import { BrowserRouter, Route, Routes,Link, Outlet,useNavigate, Navigate } from 'react-router-dom'
 import Page3 from './Page3'
 import Page2 from './Page2'
-import Login from './parts/Login'
-import Signup from './parts/Signup'
+import Login from '../components/parts/Login'
+import Signup from '../components/parts/Signup'
 import { useDispatch } from 'react-redux'
-import { addUser } from './utils/userSlice'
+import { addUser } from '../components/utils/userSlice'
 const Page1 = () => {
 
   const navigate=useNavigate();
@@ -15,10 +15,9 @@ const Page1 = () => {
   
 
   useEffect(()=>{
-    if(auth) {
+    if(!auth) {
       // auth=JSON.parse(auth);
-       
-    
+      navigate('/signup')
     }
     
   },[])
@@ -31,7 +30,7 @@ const Page1 = () => {
  
   <div>
   
-  <div className='flex  py-[10px] px-[20px] bg-stone-300/10'>
+  <div className='flex  py-[10px] px-[20px] bg-brown-300/10'>
   <div className='w-[40%] m-auto'>
       <form onSubmit={(e)=>{
         e.preventDefault()

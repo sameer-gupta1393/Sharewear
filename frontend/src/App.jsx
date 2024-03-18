@@ -1,14 +1,16 @@
 import React from 'react'
-import Page1 from './Page1'
+import Page1 from './pages/Page1'
 import { RouterProvider, createBrowserRouter} from 'react-router-dom'
-import Page2 from './Page2'
-import Page3 from './Page3'
-import Page4 from './Page4'
-import Grid from './parts/Grid'
-import Login from './parts/Login'
-import Signup from './parts/Signup'
+import Page2 from './pages/Page2'
+import Page3 from './pages/Page3'
+import Page4 from './pages/Page4'
+import Grid from './components/parts/Grid'
+import Login from './components/parts/Login'
+import Signup from './components/parts/Signup'
 import { Provider } from 'react-redux'
-import appStore from './utils/appStore'
+import appStore from './components/utils/appStore'
+import Wishlist from './pages/Wishlist'
+import Home from './pages/Home.jsx'
 const App = () => {
    // is key 
   // return auth?<Outlet/>:<Navigate to="/signup"/>
@@ -44,7 +46,17 @@ const App = () => {
       element:<div className='col-span-3  '>
        <Page4/>
 </div>
-  }   ]
+  } ,{
+        
+    path:"/wishlist",
+    element:<div className='col-span-3  '>
+     <Wishlist/>
+</div>},{
+        
+        path:"/messages",
+        element:<div className='col-span-3  '>
+         <Home/>
+    </div>}  ]
     },
     {
       path:"/rent",
