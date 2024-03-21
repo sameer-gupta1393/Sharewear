@@ -9,7 +9,7 @@ import Login from './components/parts/Login'
 import Signup from './components/parts/Signup'
 import { Provider } from 'react-redux'
 import appStore from './components/utils/appStore'
-import Wishlist from './pages/Wishlist'
+import Wishlist from './pages/Wishlist.jsx'
 import Home from './pages/Home.jsx'
 const App = () => {
    // is key 
@@ -48,10 +48,10 @@ const App = () => {
 </div>
   } ,{
         
-    path:"/wishlist",
-    element:<div className='col-span-3  '>
-     <Wishlist/>
-</div>},{
+        path:"/wishlist",
+        element:<div className='col-span-3  '>
+        <Wishlist/>
+    </div>},{
         
         path:"/messages",
         element:<div className='col-span-3  '>
