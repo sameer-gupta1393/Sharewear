@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 const  Wishlist=()=>{
   const navigate=useNavigate()
   const [Cards1,setCards]=useState([]);
+  const [change,setChange]=useState(0); // lifting state up so when click delete it recalls api
   const auth=localStorage.getItem("user")
   useEffect(()=>{
     if(auth){
@@ -11,8 +12,8 @@ const  Wishlist=()=>{
     }else{
       navigate("/login")
     }
-  },[])
-  
+  },[change])
+  console.log(change)
   const getWishlistCards = async () => {
     const url = JSON.parse(auth)._id;
     let response = await fetch(`http://localhost:5000/wishlistpop/${url}`);
@@ -23,7 +24,7 @@ const  Wishlist=()=>{
       const url2 = item1.wishlistId.sellerId;
       let response2 = await fetch(`http://localhost:5000/productName/${url2}`);
       response2 = await response2.json();
-      return [item1._id, response2.productName, item1.wishlistId.products];
+      return [item1._id, response2.productName, item1.wishlistId.products,item1.wishlistId._id];
     });
   
     // Wait for all promises to resolve
@@ -40,7 +41,7 @@ const  Wishlist=()=>{
        {Cards1.map((cards,key)=>{
         return  (<div className="flex items-stretch " key={key}>
                     {/* Card Content */}
-                    <Cards2 info={cards} />
+                    <Cards2 info={cards} onchange={()=>setChange(change+1)}/>
                 
                   </div>)
         })}

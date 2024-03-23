@@ -1,11 +1,11 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useSelector,useDispatch } from 'react-redux';
 import {Toaster ,toast} from "react-hot-toast"
 import { addUser } from '../utils/userSlice'
 import { MdDeleteForever } from "react-icons/md";
 
-const Cards2 = ({info}) => {
+const Cards2 = ({info,onchange}) => {
   const userData = useSelector((state) => state.user);
   const auth=localStorage.getItem('user');
   const dispatch=useDispatch();
@@ -13,32 +13,33 @@ const Cards2 = ({info}) => {
   console.log(info)
   let url=null;
   let j=0;
-
+  
   const handleClick=async()=>{
     try{
      const url=userData.id?userData.id:JSON.parse(auth)._id;
-     console.log({sellerId:info[0],productId:info[2][0]._id})
-     let wishlist=await fetch(`http://localhost:5000/wishlist/${url}`,{
-      method:"POST",
-      body:JSON.stringify({sellerId:info[0],productId:info[2]._id}),
+     console.log({sellerId:info[0],productId:info[2][0]})
+     
+     let wishlist=await fetch(`http://localhost:5000/wishlist/${url}/${info[3]}`,{
+      method:"DELETE",
       headers: {  // important to add
         'Content-Type': 'application/json',
       },
      })
-     wishlist=await wishlist.json();
-     console.log(wishlist)
-     if(wishlist.code==0){
-      toast.error('Item already added!')
+     wishlist=await wishlist.json()
+     if(wishlist.error){
+      toast.error('Item not deleted')
+      
      }else{
-      toast.success('Successfully added!')
+      toast.success('Successfully deleted!')
+      onchange()
      }
     
-     dispatch(addUser({wishlist:Number(userData.wishlist)+1}))
+     dispatch(addUser({wishlist:Number(userData.wishlist)-1}))
     //  setTimeout(() => {
     //   window.location.reload();
     // }, 1000);
     }catch(e){
-      console.log("wishlist adding item failed")
+      console.log("wishlist adding item failed",e)
     }
   }
   while(url==null){
@@ -74,7 +75,7 @@ const Cards2 = ({info}) => {
         <Link to="/card" className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-brown-500 rounded-lg hover:bg-stone-800 focus:ring-4 focus:outline-none focus:ring-stone-300 dark:bg-stone-600 dark:hover:bg-stone-700 dark:focus:ring-stone-800">
             Rent it  
         </Link>
-        <MdDeleteForever size={30} className='text-red-500 self-center '   />
+        <MdDeleteForever size={30} className='text-red-500 self-center hover:cursor-pointer'  onClick={handleClick} />
         
      
   </div>

@@ -56,28 +56,28 @@ const ProductCard = (props) => {
     <Card className="w-full">
       <CardHeader shadow={false} floated={false} className="h-[200px]">
         <Carousel className="rounded-xl page2div5">
-          {card[0] !== undefined && (
+          {card[0]  && (
             <img
               src={card[0]}
               alt="image 1"
               className="h-full w-full object-cover object-center"
             />
           )}
-          {card[1]!== undefined && (
+          {card[1] && (
             <img
               src={card[1]}
               alt="image 1"
               className="h-full w-full object-cover object-center"
             />
           )}
-          {card[2]!== undefined && (
+          {card[2] && (
             <img
               src={card[2]}
               alt="image 1"
               className="h-full w-full object-cover object-center"
             />
           )}
-          {card[3]!== undefined && (
+          {card[3] && (
             <img
               src={card[3]}
               alt="image 1"
