@@ -19,7 +19,7 @@ const Cards2 = ({info,onchange}) => {
      const url=userData.id?userData.id:JSON.parse(auth)._id;
      console.log({sellerId:info[0],productId:info[2][0]})
      
-     let wishlist=await fetch(`http://localhost:5000/wishlist/${url}/${info[3]}`,{
+     let wishlist=await fetch(`/api/wishlist/${url}/${info[3]}`,{
       method:"DELETE",
       headers: {  // important to add
         'Content-Type': 'application/json',

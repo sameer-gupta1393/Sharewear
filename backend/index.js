@@ -1,7 +1,17 @@
 const express=require('express')
+const path=require('path');
 const cors=require("cors")
 const multer = require('multer');
+const dotenv=require('dotenv');
+dotenv.config();
 const cloudinary = require('cloudinary').v2;
+
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key:process.env.API_KEY,
+  api_secret: process.env.API_SECRET
+});
+ 
 require('./db/config')
 const { app, server } = require("./socket/socket.js");
 
@@ -13,24 +23,30 @@ const User=require("./models/users.model")
 const Product=require("./models/products.model")
 const Wishlist = require('./models/wishlist.model.js');
  
-const dotenv=require('dotenv');
- 
-dotenv.config();
+
+// const __dirname = path.resolve();
+
 app.use(cors())
 app.use(express.json())
 
 app.use("/api/messages", messageRoutes);
 app.use("/api/users", userRoutes);
 
-app.post('/register',async(req,res)=>{
+app.use(express.static(path.join(path.resolve(), "/frontend/dist")));
+
+
+
+app.post('/api/register',async(req,res)=>{
     let result =await User.create(req.body)
     result=result.toObject()
     delete result.password;
     res.send(result);
  
 })
- 
-app.post('/login',async (req,res)=>{
+app.get('/',(req,res)=>{
+  res.send("hello");
+})
+app.post('/api/login',async (req,res)=>{
     
     
     if(req.body.password && req.body.email){
@@ -52,7 +68,7 @@ app.post('/login',async (req,res)=>{
  // [[{"productName":"kurta2","productDesc":"size M","productPrice":7990,"productImg":["fscsddf","scdv","fcsd"]}]]
  
   // new model schema --
-  app.put('/cards', async (req, res) => {
+  app.put('/api/cards', async (req, res) => {
     // const userID = req.params.id;
     const { userName,userID } = req.query;
     const newProducts = req.body;
@@ -92,7 +108,7 @@ app.post('/login',async (req,res)=>{
 });
 
   // API endpoint to get the product array length for a user
-app.get('/products/length', async (req, res) => {
+app.get('/api/products/length', async (req, res) => {
   const { userID} = req.query;
 
   try {
@@ -111,18 +127,13 @@ app.get('/products/length', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
-// Set up Cloudinary configuration (replace with your Cloudinary credentials)
-cloudinary.config({
-  cloud_name:process.env.CLOUD_NAME,
-  api_key:process.env.API_KEY,
-  api_secret: process.env.API_SECRET,
-});
+ 
 
 // Set up multer to handle file uploads
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
-app.post('/uploading', upload.single('file'), async (req, res) => {
+app.post('/api/uploading', upload.single('file'), async (req, res) => {
   try {
     // Upload the file to Cloudinary
     const result = await cloudinary.uploader.upload_stream(
@@ -144,7 +155,7 @@ app.post('/uploading', upload.single('file'), async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
-app.get('/products', async (req, res) => {
+app.get('/api/products', async (req, res) => {
     const {userID}=req.query
   try{
       const response=await Product.findOne({userID:userID});
@@ -158,7 +169,7 @@ app.get('/products', async (req, res) => {
 })
 
 //getting all cards data fromm products
-app.get("/getProducts",async(req,res)=>{
+app.get("/api/getProducts",async(req,res)=>{
   const response=await Product.find();
   res.send(response);
 })
@@ -200,7 +211,7 @@ app.get("/getProducts",async(req,res)=>{
 
 // In your backend API
 
-app.get('/wishlist/length', async (req, res) => {
+app.get('/api/wishlist/length', async (req, res) => {
   try {
     const userId = req.query.userID; // Assuming the user ID is passed as a query parameter
 
@@ -275,7 +286,7 @@ app.get('/api/getWishlistProducts/:userId', async (req, res) => {
   }
 });
 
-app.post("/wishlist/:id",async(req,res)=>{
+app.post("/api/wishlist/:id",async(req,res)=>{
    const userId = req.params.id;
    const { sellerId, productId } = req.body;
    console.log(req.body)
@@ -332,7 +343,7 @@ app.post("/wishlist/:id",async(req,res)=>{
     }
 });
 
- app.get("/wishlistpop/:id", async (req, res) => {
+ app.get("/api/wishlistpop/:id", async (req, res) => {
   try {
       const userId = req.params.id;
       
@@ -350,7 +361,7 @@ app.post("/wishlist/:id",async(req,res)=>{
   }
 });
  
-app.get("/productName/:id", async (req, res) => {
+app.get("/api/productName/:id", async (req, res) => {
   try {
       const productId = req.params.id;
 
@@ -371,7 +382,7 @@ app.get("/productName/:id", async (req, res) => {
 });
 
 // Route to remove wishlist item from user schema and delete corresponding data from wishlist schema
-app.delete('/wishlist/:userId/:wishlistId', async (req, res) => {
+app.delete('/api/wishlist/:userId/:wishlistId', async (req, res) => {
   try {
       const userId = req.params.userId;
       const wishlistId = req.params.wishlistId;
@@ -389,5 +400,18 @@ app.delete('/wishlist/:userId/:wishlistId', async (req, res) => {
   }
 });
 
-
+app.get('/api/getProducts/:sellerId/:productId',async(req,res)=>{
+  const {sellerId,productId} =req.params;
+  console.log(sellerId)
+  let user=await Product.find({_id:sellerId})
+  
+  const product=user[0].products.filter((item)=>{
+    return item[0]._id == productId;
+  })
+  res.send({name:user[0].name,sellerId:user[0].userID,productCard:product})
+})
+//wild card route 
+// app.get("*", (req, res) => {
+// 	res.sendFile(path.join(path.resolve(), "frontend", "dist", "index.html"));
+// });
 server.listen(5000)

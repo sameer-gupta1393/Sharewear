@@ -24,7 +24,7 @@ const App = () => {
         element :<Grid/> 
       },
       {
-        path:"/card",
+        path:"/card/:sellerId/:productId",
         element: <div className='col-span-3'>
         <Page2/>
         </div> 

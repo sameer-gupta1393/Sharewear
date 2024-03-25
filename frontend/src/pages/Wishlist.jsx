@@ -16,13 +16,13 @@ const  Wishlist=()=>{
   console.log(change)
   const getWishlistCards = async () => {
     const url = JSON.parse(auth)._id;
-    let response = await fetch(`http://localhost:5000/wishlistpop/${url}`);
+    let response = await fetch(`/api/wishlistpop/${url}`);
     response = await response.json();
   
     // Use Promise.all to wait for all asynchronous fetch operations to complete
     const cardPromises = response.wishlist.map(async (item1) => {
       const url2 = item1.wishlistId.sellerId;
-      let response2 = await fetch(`http://localhost:5000/productName/${url2}`);
+      let response2 = await fetch(`/api/productName/${url2}`);
       response2 = await response2.json();
       return [item1._id, response2.productName, item1.wishlistId.products,item1.wishlistId._id];
     });

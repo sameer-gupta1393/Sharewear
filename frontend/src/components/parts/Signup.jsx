@@ -15,7 +15,7 @@ const Login = ( ) => {
   const dispatch=useDispatch();
   const handleClick=async ()=>{
        
-    let result =await fetch('http://localhost:5000/login',{
+    let result =await fetch('/api/login',{
       method:'post',
       body:JSON.stringify({email:email2.current.value,password:password2.current.value}),
       headers:{
@@ -36,7 +36,7 @@ const Login = ( ) => {
 }
   const collectData=async ()=>{
       console.log( name1.current.value,email1.current.value,password1.current.value)
-      let result=await fetch('http://localhost:5000/register',{
+      let result=await fetch('/api/register',{
         method:'post',
         body:JSON.stringify({name:name1.current.value,email:email1.current.value,password:password1.current.value}),
         headers:{

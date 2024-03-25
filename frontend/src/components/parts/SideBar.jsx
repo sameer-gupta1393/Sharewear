@@ -16,7 +16,7 @@ const SideBar = () => {
   async function getProductArrayLength() {
    try {
      const url=userData.id?userData.id:JSON.parse(auth)._id;
-     const response = await fetch(`http://localhost:5000/products/length?userID=${url}`);
+     const response = await fetch(`/api/products/length?userID=${url}`);
  
      if (response.ok) {
        const data = await response.json();
@@ -35,7 +35,7 @@ const SideBar = () => {
  async function getWishlistArrayLength() {
    try {
      const url=userData.id?userData.id:JSON.parse(auth)._id;
-     const response = await fetch(`http://localhost:5000/wishlist/length?userID=${url}`);
+     const response = await fetch(`/api/wishlist/length?userID=${url}`);
  
      if (response.ok) {
        const data = await response.json();

@@ -9,7 +9,7 @@ const useSendMessage = () => {
 	const sendMessage = async (message) => {
 		setLoading(true);
 		try {
-			const res = await fetch(`http://localhost:5000/api/messages/send/${selectedConversation._id}?_id=${auth_id}`, {
+			const res = await fetch(`/api/messages/send/${selectedConversation._id}?_id=${auth_id}`, {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",

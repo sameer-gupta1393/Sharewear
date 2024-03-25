@@ -16,12 +16,12 @@ const Grid2=()=>{
   const getWishlistCards=async()=>{
     let Cards2=[];
     const url=userData.id?userData.id:JSON.parse(auth)._id;
-    let response=await fetch(`http://localhost:5000/wishlistpop/${url}`)
+    let response=await fetch(`/api/wishlistpop/${url}`)
     response=await response.json()
    
     response.wishlist.map(async(item1)=>{
          const url2=item1.productId;
-         let response2=await fetch(`http://localhost:5000/productName/${url2}`)
+         let response2=await fetch(`/api/productName/${url2}`)
          response2=await response.json()
          Cards2.push([item1._id,response2.name,item1.wishlistId.products ])
          console.log("cards",[item1._id,item1.productname,pro])

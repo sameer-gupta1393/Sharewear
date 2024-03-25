@@ -15,7 +15,7 @@ const Grid=()=>{
   
   const getCards=async()=>{
     let Cards2=[];
-    let response=await fetch('http://localhost:5000/getProducts')
+    let response=await fetch('/api/getProducts')
     response=await response.json()
     response.map((item1)=>{
        item1.products.map((pro)=>{

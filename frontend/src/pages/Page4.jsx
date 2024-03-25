@@ -18,7 +18,7 @@ import { useEffect, useState } from "react";
     
     async function getProductArray() {
      try {
-       const response = await fetch(`http://localhost:5000/products?userID=${auth}`);
+       const response = await fetch(`/api/products?userID=${auth}`);
    
        if (response.ok) {
          const data2 = await response.json();

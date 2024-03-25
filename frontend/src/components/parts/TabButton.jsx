@@ -94,9 +94,10 @@ export default function TabButton( ){
         return;
       }
       setChange(false)
-     
+      // console.log([event[0].value,event[9].value,event[1].value,event[2].value,event[3].value,lat_long])
       await toast.promise(
-        handleBoth([event[0].value,event[9].value,event[1].value,event[2].value,event[3].value,lat_long])
+        
+        handleBoth([event[0].value,event[9].value,event[1].value,event[2].value,event[3].value,lat_long,event[8].value])
       ,
       {
         loading: 'Saving Card...',
@@ -104,17 +105,23 @@ export default function TabButton( ){
         error: <b>Could not save.</b>,
       }
     );
-    setTimeout(() => {
-      window.location.reload();
-    }, 1500);
+    // setTimeout(() => {
+    //   window.location.reload();
+    // }, 1500);
 
     };
  const handleBoth=async(data)=>{
-  const urls = await uploadImages( [fileS1, fileS2, fileS3, fileS4]);
+  try{
+    const urls = await uploadImages( [fileS1, fileS2, fileS3, fileS4]);
   console.log("URL URL ::" ,urls,"data data ::",data)
 
-  const newProducts = [[{"productCat":data[0],"lat_long":data[5],"productLoc":data[1],"productName":data[2],"productDesc":data[3],"productPrice":data[4],"productImg":[urls[0],urls[1],urls[2],urls[3]]}]];
+  const newProducts = [[{"productCat":data[0],"lat_long":data[5],"productLocation":data[6],"productName":data[2],"productDesc":data[3],"productPrice":data[4],"productImg":[urls[0],urls[1],urls[2],urls[3]]}]];
   await updateCard(newProducts);
+  }
+  catch(e){
+    throw new Error('Could not save.');
+  }
+  
  }
  const uploadImages = async (files) => {
       const formDataArray = [];
@@ -133,14 +140,21 @@ export default function TabButton( ){
         for (const [key, value] of formData.entries()) {
           console.log(`${key}: ${value}`);
         }
-        const res = await fetch(`http://localhost:5000/uploading`, {
+       try{
+        const res = await fetch(`/api/uploading`, {
           method: 'POST',
           body: formData,
         });
-        
+        if(!res){
+              return;
+        }
         const clouddata = await res.json();
         uploadedUrls[index] = clouddata.url;
         console.log(`Uploaded image ${index + 1}: ${clouddata.url}`);
+       }catch(e){
+          console.error(e)
+       }
+       
       });
     
       await Promise.all(uploadPromises);
@@ -157,10 +171,17 @@ export default function TabButton( ){
     const userID=auth._id
     const userName=auth.name
     async function updateCard( newProducts) {
-        const url =`http://localhost:5000/cards?userID=${userID}&userName=${userName}`;  // Replace with the actual endpoint URL
+
+        const url =`/api/cards?userID=${userID}&userName=${userName}`;  // Replace with the actual endpoint URL
         
         
         try {
+          console.log(newProducts[0][0].productImg[0]&&newProducts[0][0].productImg[1]&&newProducts[0][0].productImg[2]&&newProducts[0][0].productImg[3])
+          if(newProducts[0][0].productImg[0]||newProducts[0][0].productImg[1]||newProducts[0][0].productImg[2]||newProducts[0][0].productImg[3]){
+            
+          }else{
+            throw new Error('Error in uploading cards');
+          }
           const response = await fetch(`${url}`, {
             method: 'PUT',
             headers: {
@@ -180,6 +201,8 @@ export default function TabButton( ){
           }
         } catch (error) {
           console.error('Fetch error:', error);
+          // toast.error("Failed to saved")
+          throw new Error('Could not save.');
           // Handle fetch error
         }
       }
@@ -239,7 +262,7 @@ export default function TabButton( ){
                   </div>
                   <div>
                       <label htmlFor="productImg1" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Product Images   </label>
-                      <input type="file"  name="productImg1" onChange={handleChange1} accept="image/*" id="file1" className="hidden bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="your product rent amount" required=""/>
+                      <input type="file"  name="productImg1" onChange={handleChange1} accept="image/*" id="file1" className="hidden bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="your product rent amount" />
                       <input type="file" name="productImg2" onChange={handleChange2} accept="image/*" id="file2" className="hidden bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="your product rent amount" />
                       <input type="file" name="productImg3" onChange={handleChange3} accept="image/*" id="file3" className="hidden bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="your product rent amount" />
                       <input type="file" name="productImg4" onChange={handleChange4} accept="image/*" id="file4" className="hidden bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="your product rent amount" />

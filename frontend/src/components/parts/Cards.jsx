@@ -16,7 +16,7 @@ const Cards = ({info}) => {
     try{
      const url=userData.id?userData.id:JSON.parse(auth)._id;
      console.log({sellerId:info[0],productId:info[2][0]._id})
-     let wishlist=await fetch(`http://localhost:5000/wishlist/${url}`,{
+     let wishlist=await fetch(`/api/wishlist/${url}`,{
       method:"POST",
       body:JSON.stringify({sellerId:info[0],productId:info[2][0]._id}),
       headers: {  // important to add
@@ -69,7 +69,7 @@ const Cards = ({info}) => {
       owner-<b>{info[1]}</b>
     </p>
   <div className="px-6 py-4  flex justify-between">
-        <Link to="/card" className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-brown-500 rounded-lg hover:bg-stone-800 focus:ring-4 focus:outline-none focus:ring-stone-300 dark:bg-stone-600 dark:hover:bg-stone-700 dark:focus:ring-stone-800">
+        <Link to={`/card/${info[0]}/${info[2][0]._id}`} className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-brown-500 rounded-lg hover:bg-stone-800 focus:ring-4 focus:outline-none focus:ring-stone-300 dark:bg-stone-600 dark:hover:bg-stone-700 dark:focus:ring-stone-800">
             Rent it  
         </Link>
         <a className='cursor-pointer p-2 ' onClick={handleClick}>
