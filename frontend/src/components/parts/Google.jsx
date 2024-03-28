@@ -7,7 +7,7 @@ import {
 import React, { useEffect, useState } from 'react';
 
 const Google = () => {
-    const apiKey = "94e4b82bb56d4c239a9b7a80f2b12a5b"; // Replace with your OpenCage API key
+    const apiKey = "94e4b82bb56d4c239a9b7a80f2b12a5b"; //  OpenCage API key
     const [inputValue, setInputValue] = useState('');
      const [currentLocation, setCurrentLocation] = useState(false); // Change to boolean
     const [suggestions, setSuggestions] = useState([]);

@@ -18,6 +18,7 @@ const Grid2=()=>{
     const url=userData.id?userData.id:JSON.parse(auth)._id;
     let response=await fetch(`/api/wishlistpop/${url}`)
     response=await response.json()
+    console.log(response)
    
     response.wishlist.map(async(item1)=>{
          const url2=item1.productId;

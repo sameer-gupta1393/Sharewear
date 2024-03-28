@@ -105,21 +105,23 @@ export default function TabButton( ){
         error: <b>Could not save.</b>,
       }
     );
-    // setTimeout(() => {
-    //   window.location.reload();
-    // }, 1500);
+   
 
     };
  const handleBoth=async(data)=>{
   try{
-    const urls = await uploadImages( [fileS1, fileS2, fileS3, fileS4]);
+  const urls = await uploadImages( [fileS1, fileS2, fileS3, fileS4]);
   console.log("URL URL ::" ,urls,"data data ::",data)
 
   const newProducts = [[{"productCat":data[0],"lat_long":data[5],"productLocation":data[6],"productName":data[2],"productDesc":data[3],"productPrice":data[4],"productImg":[urls[0],urls[1],urls[2],urls[3]]}]];
   await updateCard(newProducts);
+  setTimeout(() => {
+    window.location.reload();
+  }, 1500);
   }
   catch(e){
     throw new Error('Could not save.');
+   
   }
   
  }
@@ -153,6 +155,7 @@ export default function TabButton( ){
         console.log(`Uploaded image ${index + 1}: ${clouddata.url}`);
        }catch(e){
           console.error(e)
+          throw new Error('Could not save.');
        }
        
       });

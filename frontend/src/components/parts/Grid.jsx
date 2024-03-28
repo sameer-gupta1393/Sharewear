@@ -30,7 +30,7 @@ const Grid=()=>{
       
       
        /* Main Content Grid */
-       <div className="col-span-3 p-2 overflow-hidden grid grid-cols-3 gap-4">
+       <div className="col-span-3 p-2 overflow-hidden grid grid-cols-3 gap-2 content-start">
        {/* Card 1 */}
        {Cards1.map((cards,key)=>{
         return  (<div className="flex items-stretch " key={key}>

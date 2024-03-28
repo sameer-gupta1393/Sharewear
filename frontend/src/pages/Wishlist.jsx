@@ -18,13 +18,13 @@ const  Wishlist=()=>{
     const url = JSON.parse(auth)._id;
     let response = await fetch(`/api/wishlistpop/${url}`);
     response = await response.json();
-  
+   console.log(response)
     // Use Promise.all to wait for all asynchronous fetch operations to complete
     const cardPromises = response.wishlist.map(async (item1) => {
       const url2 = item1.wishlistId.sellerId;
       let response2 = await fetch(`/api/productName/${url2}`);
       response2 = await response2.json();
-      return [item1._id, response2.productName, item1.wishlistId.products,item1.wishlistId._id];
+      return [item1._id, response2.productName, item1.wishlistId.products,item1.wishlistId._id,item1.wishlistId.sellerId];
     });
   
     // Wait for all promises to resolve
