@@ -5,6 +5,7 @@ import {  useLocation,Link, Outlet,useNavigate, Navigate } from 'react-router-do
 import  { toast,Toaster } from 'react-hot-toast';
 import useConversation from "../zustand/useConversation";
 import { getLocation } from "../components/utils/getLocation"
+import useSearchedCards from '../hooks/useSearchedCards';
  
 const Page1 = () => {
 
@@ -18,7 +19,7 @@ const Page1 = () => {
   const [currentValue, setCurrentValue] = useState(1);
   const [minValue, setMinValue] = useState(0);
   const [maxValue, setMaxValue] = useState(0);
-  const { location,setLocation} = useConversation();
+  const { location,setLocation,setProductsCards} = useConversation();
   const [error, setError] = useState('');
   const handleToggle = () => {
     if(location==null){
@@ -74,8 +75,8 @@ const Page1 = () => {
           setError('');
       }
   };
-
-  const handleSearch = (e) => {
+  
+  const handleSearch = async(e) => {
     e.preventDefault();
     
       if(isEnabled2){
@@ -102,13 +103,16 @@ const Page1 = () => {
     const searchData = {
       searchText:searchText.current.value,
       selectedCategories: selectedTags,
-      distance: isEnabled ? currentValue : null,
+      distance: isEnabled ? {...location,nearBy:currentValue} : null,
       minPrice: isEnabled2 ? minValue:null,
       maxPrice: isEnabled2 ? maxValue :null
     };
 
     // Perform necessary actions (e.g., navigation or API calls)
     console.log(searchData);
+    let Cards=await useSearchedCards(searchData)
+    setProductsCards(Cards)
+    console.log(Cards)
     // Navigate to the search results page or trigger API call with searchData
     // navigate('/search-results');
   };
@@ -210,8 +214,8 @@ const Page1 = () => {
         <div className='inline-block w-[15vw]  h-fit  mt-[2vh] bg-white p-6 rounded-lg shadow-lg'>
           <p className='font-semibold text-[15px] text-center mt-[1vh] mb-4'>Filter by  Distance(km)</p>
           <label className="inline-flex items-center mb-5 cursor-pointer">
-            <input type="checkbox"  onChange={handleToggle} className="sr-only peer" value={isEnabled}/>
-            <div className={`relative w-9 h-5 bg-gray-200 peer-focus:outline-none dark:peer-focus:ring-blue-800 rounded-full peer 
+            <input type="checkbox"  onChange={handleToggle} className="sr-only peer" checked={isEnabled} value={isEnabled}/>
+            <div  className={`relative w-9 h-5 bg-gray-200 peer-focus:outline-none dark:peer-focus:ring-blue-800 rounded-full peer 
                                
                                rtl:peer-checked:after:-translate-x-full
                              peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white
@@ -239,7 +243,7 @@ const Page1 = () => {
         <div className='inline-block w-[15vw]  h-fit  mt-[2vh] bg-white p-6 rounded-lg shadow-lg'>
           <p className='font-semibold text-[15px] text-center mt-[1vh] mb-4'>Filter by  Price(Rs)</p>
           <label className="inline-flex items-center mb-5 cursor-pointer">
-            <input type="checkbox"  onChange={handleToggle2} className="sr-only peer" value={isEnabled2}/>
+            <input type="checkbox"  onChange={handleToggle2} className="sr-only peer" value={isEnabled2} checked={isEnabled2}/>
             <div className="relative w-9 h-5 bg-gray-200 peer-focus:outline-none  dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
             <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">{!isEnabled2?"Disabled":"Enabled"}</span>
           </label>

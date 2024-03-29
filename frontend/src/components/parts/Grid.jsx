@@ -1,9 +1,11 @@
 import React,{useEffect, useState} from "react"
 import Cards from "./Cards";
 import { useNavigate } from "react-router-dom";
+import useConversation from "../../zustand/useConversation";
 const Grid=()=>{
   const navigate=useNavigate()
   const [Cards1,setCards]=useState([]);
+  const {ProductsCards,setProductsCards}=useConversation()
   const auth=localStorage.getItem("user")
   useEffect(()=>{
     if(auth){
@@ -24,7 +26,9 @@ const Grid=()=>{
        })
     })
     setCards(Cards2)
+    setProductsCards(Cards2)
     console.log(Cards2)
+
   }
     return (
       
@@ -32,7 +36,7 @@ const Grid=()=>{
        /* Main Content Grid */
        <div className="col-span-3 p-2 overflow-hidden grid grid-cols-3 gap-2 content-start">
        {/* Card 1 */}
-       {Cards1.map((cards,key)=>{
+       {ProductsCards.map((cards,key)=>{
         return  (<div className="flex items-stretch " key={key}>
                     {/* Card Content */}
                     <Cards info={cards} />

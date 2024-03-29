@@ -6,7 +6,9 @@ const useConversation = create((set) => ({
 	messages: [],
 	setMessages: (messages) => set({ messages }),
 	location:null,
-    setLocation:(location) => set({location})
+    setLocation:(location) => set({location}),
+	ProductsCards:[],
+	setProductsCards:(ProductsCards)=>set ({ProductsCards})
 }));
 
 export default useConversation;

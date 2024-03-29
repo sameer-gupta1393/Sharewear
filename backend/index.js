@@ -2,6 +2,7 @@ const express=require('express')
 const path=require('path');
 const cors=require("cors")
 const multer = require('multer');
+const calcCrow = require('./utils/Distance.js');
 const dotenv=require('dotenv');
 dotenv.config();
 const cloudinary = require('cloudinary').v2;
@@ -173,7 +174,108 @@ app.get("/api/getProducts",async(req,res)=>{
   const response=await Product.find();
   res.send(response);
 })
+app.post('/api/getProducts', async (req, res) => {
+  try {
+      const searchData = req.body;
+      // console.log(searchData)
+      // Prepare the query based on the search criteria
+    //   const query = {};
 
+    //   // Check if searchText is provided
+    //   if (searchData.searchText) {
+    //     query['products.productName'] = { $regex: searchData.searchText, $options: 'i' };
+    // }
+
+    //   // Check if selectedCategories is provided
+    //   if (searchData.selectedCategories && searchData.selectedCategories.length > 0) {
+    //       query.productCat = { $in: searchData.selectedCategories };
+    //   }
+
+    //   // Check if distance is provided
+    //   // Assuming distance is not implemented in this example
+
+    //   // Check if minPrice and maxPrice are provided
+    //   if (searchData.minPrice !== null && searchData.maxPrice !== null) {
+    //       query.productPrice = { $gte: searchData.minPrice, $lte: searchData.maxPrice };
+    //   }
+
+      // Fetch products based on the query
+      const product = await Product.find();
+      let cards=[];
+      
+      let filtered = product.map((item0) => {
+        let filteredCards=item0.products.filter((item) => {
+          const searchText = searchData?.searchText.trim().toLowerCase();
+          const productName = item[0].productName.trim().toLowerCase();
+          const productDesc = item[0].productDesc.trim().toLowerCase();
+  
+          //category checker
+          let category =true;
+          if(searchData?.selectedCategories.length>0){
+             category = searchData?.selectedCategories.some(selectedCat =>
+                item[0].productCat.toLowerCase() === selectedCat.toLowerCase()
+            );
+            }
+           
+          //serachText checker for product name and product description
+          let productText=true;
+          // Check if productName or productDesc contains searchText
+          const nameMatch = productName.includes(searchText);
+          const descMatch = productDesc.includes(searchText);
+          const nameMatch2 = searchText.includes(productName);
+          const descMatch2 =searchText.includes(productDesc);
+          const match = nameMatch || descMatch ||nameMatch2 || descMatch2;
+         
+
+          // Check if price is within the specified range
+        let priceMatch=true;
+        if(searchData.minPrice!==null && searchData.maxPrice!==null){
+          const minPrice = searchData?.minPrice  ;
+          const maxPrice = searchData?.maxPrice  ;
+          priceMatch = parseFloat(item[0].productPrice) >= minPrice && parseFloat(item[0].productPrice) <= maxPrice;
+          // console.log(minPrice,maxPrice,priceMatch)
+        }
+          
+        let distanceMatch=true;
+        let distance_nearMe=null;
+        if(searchData.distance){
+          let latitude=searchData.distance.latitude;
+          let longitude= searchData.distance.longitude;
+          let nearBy=searchData.distance.nearBy;
+          let lat_long=item[0].lat_long.split(',')
+       
+          const distance = calcCrow(latitude,longitude,lat_long[0],lat_long[1]);
+          console.log(nearBy,distance)
+          if(distance<=nearBy){
+            distanceMatch=true;
+            distance_nearMe=distance;
+          }else{
+            distanceMatch=false;
+          }
+          // console.log(distance,latitude,longitude,lat_long[0],lat_long[1]);
+        }
+      
+           let allChecked=category  && match && priceMatch && distanceMatch;
+          
+           if(allChecked){
+            if(distance_nearMe){
+              cards.push([item0._id,item0.name,item,distance_nearMe])
+            }else{
+              cards.push([item0._id,item0.name,item])
+            }
+        
+           }
+          
+            // console.log(category, item[0].productCat);
+            return category;
+        });
+    });
+      res.json(cards);
+  } catch (error) {
+      console.error('Error fetching products:', error);
+      res.status(500).json({ error: 'Internal server error' });
+  }
+});
 // app.post('/wishlist/:id', async (req, res) => {
 
 //   const userId = req.params.id;
