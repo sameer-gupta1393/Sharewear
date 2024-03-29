@@ -1,8 +1,8 @@
 import { Carousel } from "@material-tailwind/react";
 import { useEffect ,useState} from "react";
-import { useParams,useNavigate } from "react-router-dom";
+import { useParams,useNavigate,Link } from "react-router-dom";
 export default function  Page2() {
-  let {sellerId,productId}= useParams();
+  let {sellerId,productId,userID}= useParams();
   const navigate=useNavigate();
    
   let auth=localStorage.getItem('user');
@@ -63,9 +63,9 @@ export default function  Page2() {
         <h2 className="text-[20px]"><span className="font-bold">Product Location: </span> {info.productCard.productLocation}</h2>
     </div>
     <div className="page2div6 bg-white rounded-lg p-[10px]  ml-[10px] mt-[10px] grid">
-    <button type="button" className=" m-auto text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center   ">
+    <Link to={`/chat/${userID}`} type="button" className=" m-auto text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center   ">
       Chat with Seller
-    </button>
+    </Link>
     </div>
     </div>
   ):(<></>);

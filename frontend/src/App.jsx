@@ -6,6 +6,7 @@ import Page3 from './pages/Page3'
 import Page4 from './pages/Page4'
 import Grid from './components/parts/Grid'
 import Login from './components/parts/Login'
+import HomeFiltered from './pages/HomeFiltered.jsx'
 import Signup from './components/parts/Signup'
 import { Provider } from 'react-redux'
 import appStore from './components/utils/appStore'
@@ -24,7 +25,7 @@ const App = () => {
         element :<Grid/> 
       },
       {
-        path:"/card/:sellerId/:productId",
+        path:"/card/:sellerId/:productId/:userID",
         element: <div className='col-span-3'>
         <Page2/>
         </div> 
@@ -56,6 +57,11 @@ const App = () => {
         path:"/messages",
         element:<div className='col-span-3  '>
          <Home/>
+    </div>},{
+        
+        path:"/chat/:userID",
+        element:<div className='col-span-3  '>
+         <HomeFiltered/>
     </div>}  ]
     },
     {

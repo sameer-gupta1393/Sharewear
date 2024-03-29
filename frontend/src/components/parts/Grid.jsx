@@ -21,8 +21,8 @@ const Grid=()=>{
     response=await response.json()
     response.map((item1)=>{
        item1.products.map((pro)=>{
-         Cards2.push([item1._id,item1.name,pro])
-         console.log("cards",[item1._id,item1.name,pro])
+         Cards2.push([item1._id,item1.name,pro,null,item1.userID])
+        //  console.log("cards",[item1._id,item1.name,pro])
        })
     })
     setCards(Cards2)

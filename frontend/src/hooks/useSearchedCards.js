@@ -2,7 +2,7 @@
     // {searchText: '', selectedCategories: Array(0), distance: null, minPrice: null, maxPrice: null}
      
         try{
-            let Cards2=[];
+           
             let response=await fetch('/api/getProducts',{
                 method:'post',
                 headers: {

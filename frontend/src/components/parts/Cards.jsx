@@ -69,7 +69,7 @@ const Cards = ({info}) => {
       owner-<b>{info[1]}</b>
     </p>
   <div className="px-6 py-4  flex justify-between items-center">
-        <Link to={`/card/${info[0]}/${info[2][0]._id}`} className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-brown-500 rounded-lg hover:bg-stone-800 focus:ring-4 focus:outline-none focus:ring-stone-300 dark:bg-stone-600 dark:hover:bg-stone-700 dark:focus:ring-stone-800">
+        <Link to={`/card/${info[0]}/${info[2][0]._id}/${info[4]}`} className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-brown-500 rounded-lg hover:bg-stone-800 focus:ring-4 focus:outline-none focus:ring-stone-300 dark:bg-stone-600 dark:hover:bg-stone-700 dark:focus:ring-stone-800">
             Rent it  
         </Link>
         {info[3]?<span className='bg-orange-500 text-white text-sm font-bold  px-2.5  h-fit rounded dark:bg-yellow-900 dark:text-yellow-300'>{info[3]?`${info[3]} km`:''}</span>:<></>}

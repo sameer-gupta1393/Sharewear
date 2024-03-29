@@ -13,9 +13,7 @@ const Cards2 = ({info,onchange}) => {
   console.log(info)
   let url=null;
   let j=0;
-  const getWishlistInfo=async()=>{
-     let wishlist=await fetch()
-  }
+   
   const handleClick=async()=>{
     try{
      const url=userData.id?userData.id:JSON.parse(auth)._id;
@@ -75,7 +73,7 @@ const Cards2 = ({info,onchange}) => {
       owner-<b>{info[1]}</b>
     </p>
   <div className="px-6 py-4  flex justify-between">
-        <Link to={`/card/${info[4]}/${info[2]._id}`} className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-brown-500 rounded-lg hover:bg-stone-800 focus:ring-4 focus:outline-none focus:ring-stone-300 dark:bg-stone-600 dark:hover:bg-stone-700 dark:focus:ring-stone-800">
+        <Link to={`/card/${info[4]}/${info[2]._id}/${info[5]}`} className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-brown-500 rounded-lg hover:bg-stone-800 focus:ring-4 focus:outline-none focus:ring-stone-300 dark:bg-stone-600 dark:hover:bg-stone-700 dark:focus:ring-stone-800">
             Rent it  
         </Link>
         <MdDeleteForever size={30} className='text-red-500 self-center hover:cursor-pointer'  onClick={handleClick} />

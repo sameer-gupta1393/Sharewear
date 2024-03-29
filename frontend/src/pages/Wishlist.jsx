@@ -24,7 +24,8 @@ const  Wishlist=()=>{
       const url2 = item1.wishlistId.sellerId;
       let response2 = await fetch(`/api/productName/${url2}`);
       response2 = await response2.json();
-      return [item1._id, response2.productName, item1.wishlistId.products,item1.wishlistId._id,item1.wishlistId.sellerId];
+      console.log([response2])
+      return [item1._id, response2.productName, item1.wishlistId.products,item1.wishlistId._id,item1.wishlistId.sellerId,response2.sellerID];
     });
   
     // Wait for all promises to resolve
