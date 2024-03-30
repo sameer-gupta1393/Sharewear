@@ -6,24 +6,20 @@ const calcCrow = require('./utils/Distance.js');
 const dotenv=require('dotenv');
 dotenv.config();
 const cloudinary = require('cloudinary').v2;
-
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
   api_key:process.env.API_KEY,
   api_secret: process.env.API_SECRET
 });
- 
-require('./db/config')
+const connectToMongoDB= require('./db/connectToMongoDB.js')
 const { app, server } = require("./socket/socket.js");
-
 const messageRoutes = require("./routes/message.routes.js");
 const userRoutes = require("./routes/user.routes.js");
-
-
 const User=require("./models/users.model")
 const Product=require("./models/products.model")
 const Wishlist = require('./models/wishlist.model.js');
- 
+
+const PORT = process.env.PORT || 5000;
 
 // const __dirname = path.resolve();
 
@@ -174,6 +170,7 @@ app.get("/api/getProducts",async(req,res)=>{
   const response=await Product.find();
   res.send(response);
 })
+//search filter api
 app.post('/api/getProducts', async (req, res) => {
   try {
       const searchData = req.body;
@@ -259,9 +256,9 @@ app.post('/api/getProducts', async (req, res) => {
           
            if(allChecked){
             if(distance_nearMe){
-              cards.push([item0._id,item0.name,item,distance_nearMe])
+              cards.push([item0._id,item0.name,item,distance_nearMe,item0.userID])
             }else{
-              cards.push([item0._id,item0.name,item])
+              cards.push([item0._id,item0.name,item,null,item0.userID])
             }
         
            }
@@ -445,7 +442,25 @@ app.post("/api/wishlist/:id",async(req,res)=>{
     }
 });
 
- app.get("/api/wishlistpop/:id", async (req, res) => {
+//  app.get("/api/wishlistpop/:id", async (req, res) => {
+//   try {
+//       const userId = req.params.id;
+      
+//       // Find the user and populate the wishlist array with the referenced documents
+//       const user = await User.findById(userId).populate('wishlist.wishlistId');
+
+//       if (!user) {
+//           return res.status(404).json({ message: 'User not found' });
+//       }
+
+//       res.status(200).json({ wishlist: user.wishlist });
+//   } catch (error) {
+//       console.error(error);
+//       res.status(500).json({ error: "Server error" });
+//   }
+// });
+ 
+app.get("/api/wishlistpop/:id", async (req, res) => {
   try {
       const userId = req.params.id;
       
@@ -456,13 +471,19 @@ app.post("/api/wishlist/:id",async(req,res)=>{
           return res.status(404).json({ message: 'User not found' });
       }
 
+      // Filter out wishlist items that don't have a reference or couldn't be populated
+      user.wishlist = user.wishlist.filter(item => item.wishlistId);
+
+      // Save the user document with filtered wishlist
+      await user.save();
+
       res.status(200).json({ wishlist: user.wishlist });
   } catch (error) {
       console.error(error);
       res.status(500).json({ error: "Server error" });
   }
 });
- 
+
 app.get("/api/productName/:id", async (req, res) => {
   try {
       const productId = req.params.id;
@@ -475,8 +496,9 @@ app.get("/api/productName/:id", async (req, res) => {
       }
 
       const productName = product.name;
+      const sellerID=product.userID;
 
-      res.status(200).json({ productName });
+      res.status(200).json({ productName,sellerID });
   } catch (error) {
       console.error(error);
       res.status(500).json({ error: "Server error" });
@@ -512,8 +534,47 @@ app.get('/api/getProducts/:sellerId/:productId',async(req,res)=>{
   })
   res.send({name:user[0].name,sellerId:user[0].userID,productCard:product})
 })
+
+app.delete('/api/deleteProductCard/:userID/:productId', async (req, res) => {
+  try {
+    const { userID, productId } = req.params;
+
+    // Find the user by userID
+    const userProducts = await Product.findOne({ userID });
+
+    if (!userProducts) {
+        return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Find the index of the product to be deleted
+    const productIndex = userProducts.products.findIndex(product => product[0]._id == productId);
+
+    if (productIndex === -1) {
+        return res.status(404).json({ error: 'Product not found' });
+    }
+
+    // Remove the product from the products array
+    userProducts.products.splice(productIndex, 1);
+
+    // Save the updated user products document
+    await userProducts.save();
+    
+
+    // Delete product from wishlist where products._id matches productId
+    await Wishlist.deleteMany({ 'products._id': productId });
+
+    res.status(200).json({ message: 'Product deleted successfully from product and wishlist schema' });
+} catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Server error' });
+}
+});
+
 //wild card route 
-// app.get("*", (req, res) => {
-// 	res.sendFile(path.join(path.resolve(), "frontend", "dist", "index.html"));
-// });
-server.listen(5000)
+app.get("*", (req, res) => {
+	res.sendFile(path.join(path.resolve(), "frontend", "dist", "index.html"));
+});
+server.listen(PORT, () => {
+	connectToMongoDB();
+	console.log(`Server Running on port ${PORT}`);
+});
