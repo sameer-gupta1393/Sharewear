@@ -42,6 +42,7 @@ const Grid=()=>{
                     <Cards info={cards} />
                   </div>)
         })}
+        {ProductsCards.length==0 && <p className="text-black text-18 font-bold text-center col-span-full">NO RESULT FOUND!</p>}
  
      </div>
     )

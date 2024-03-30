@@ -7,6 +7,7 @@ import {
     Button,
   } from "@material-tailwind/react";
  
+import {toast,Toaster} from 'react-hot-toast'
 import { Carousel } from "@material-tailwind/react";
  
 import { useEffect, useState } from "react";
@@ -14,6 +15,7 @@ import { useEffect, useState } from "react";
     
 
     const [data,setData]=useState([])
+    const [newData,setnewData]=useState([])
     const auth=JSON.parse(localStorage.getItem('user'))._id;
     
     async function getProductArray() {
@@ -38,19 +40,40 @@ import { useEffect, useState } from "react";
        console.error('Fetch error:', error);
      }
    }
-   
+   const handleClick=async(productId,index)=>{
+    try{
+      const deletedcard=await fetch(`/api/deleteProductCard/${auth}/${productId}`,{
+        method:"delete"
+      })
+      const deleted=await deletedcard.json()
+      console.log(deleted)
+      if(deleted.message){
+        let spliced = data.splice(index, 1);
+        setnewData(data)
+        toast.success('deleted card')
+      }else{
+        throw new Error(deleted.error);
+      }
+      //http://localhost:3000/api/deleteProductCard/65e5e145cb305daeae9f045f/6601c228b024a62b1f5bfc58
+    }catch(e){
+       toast.error('Not deleted')
+       console.log(e)
+    }
+    
+
+  }
+
    useEffect(()=>{
      // Example usage
-     console.log("check ceck")
+    
      if(auth) getProductArray();
-   },[])
+   },[newData])
 // ... Other imports
 
 const ProductCard = (props) => {
   const card = props.info[0].productImg;
   const { productName, productPrice, productDesc } = props.info[0];
 
-  console.log(card);
 
   return (
     <Card className="w-full">
@@ -110,6 +133,7 @@ const ProductCard = (props) => {
         <Button
           ripple={false}
           fullWidth={true}
+          onClick={()=>handleClick(props.info[0]._id,props.index)}
           className="bg-red-500 text-white px-2 py-1 rounded-lg focus:outline-none hover:bg-red-600"
         >
           REMOVE
@@ -122,18 +146,23 @@ const ProductCard = (props) => {
 
     return (
         <div className="col-span-3 p-2 overflow-hidden grid grid-cols-3 gap-4 ">
-       
+        <Toaster
+        position="top-center"
+        reverseOrder={false}
+      />
        { 
         
         data.map((item,id)=>{
          return (
             <div key={id} className="flex items-stretch  "> 
-               <ProductCard info={item} />
+               
+               <ProductCard info={item} index={id}/>
             </div>
          )
        }
        )}
-      
+       
+       { data.length==0 && <p className="text-black text-18 font-bold text-center col-span-full"> NO PRODUCTS!</p>}
      
       </div>
     );

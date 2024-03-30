@@ -46,7 +46,7 @@ const  Wishlist=()=>{
                 
                   </div>)
         })}
- 
+        { Cards1.length==0 && <p className="text-black text-18 font-bold text-center col-span-full">EMPTY  WISHLIST!</p>}
      </div>
     )
   }

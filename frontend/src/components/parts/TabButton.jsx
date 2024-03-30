@@ -76,6 +76,10 @@ export default function TabButton( ){
     const handleSelectChange = async(event,img) => {
       const data=[event[0]?.value,event[1]?.value,event[2]?.value,event[3]?.value,event[4].value,event[5]?.value,event[6]?.value,event[7].value,event[8].value,event[9].value]
       let lat_long=document.getElementById('currentLocationCheckbox').value;
+      if(lat_long==","){
+        toast.error("please give location permission")
+        return ;
+      }
       setSelectedValue(data);
      
        
@@ -261,7 +265,7 @@ export default function TabButton( ){
                   </div>
                   <div>
                       <label htmlFor="productPrice" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Rent Amount 	<b>	&#8377;</b> </label>
-                      <input type="number" name="productPrice" id="productPrice" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="your product rent amount" required=""/>
+                      <input type="number" name="productPrice" id="productPrice" min='0' step='1' className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="your product rent amount" required=""/>
                   </div>
                   <div>
                       <label htmlFor="productImg1" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Product Images   </label>
