@@ -243,7 +243,7 @@ app.post('/api/getProducts', async (req, res) => {
        
           const distance = calcCrow(latitude,longitude,lat_long[0],lat_long[1]);
           console.log(nearBy,distance)
-          if(distance<=nearBy){
+          if(distance< parseFloat(nearBy)){
             distanceMatch=true;
             distance_nearMe=distance;
           }else{
