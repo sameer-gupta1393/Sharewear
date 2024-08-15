@@ -1,4 +1,4 @@
-Rentomine is a MERN stack project whose goal is to connect people those who wanted to rent their clothes to other's.
+Rentomine is a MERN stack project which enable its users to rent out their clothes for small passive income 
 
 it has two parts backend and frontend .
 
